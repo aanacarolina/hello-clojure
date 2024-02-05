@@ -10,7 +10,12 @@
 
 (def routes
   (route/expand-routes
-   #{["/hello" :get respond-hello :route-name :hello]}))
+   #{["/hello" :get respond-hello :route-name :hello]
+   ["/user/{:id}" :get respond-user :route-name :user]
+   ["/user/{:id}" :delete respond-user :route-name :user]
+   ["/user/{:id}" :patch respond-user :route-name :user]
+   }
+   ))
 
 (defn create-server []
   (http/create-server

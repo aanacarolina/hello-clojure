@@ -20,6 +20,26 @@ Jetty 11 is the default container used with Pedestal. I decided to use Pedestal 
 
 Jetty provides a web server and servlet container, additionally providing support for HTTP/2, WebSocket, OSGi, JMX, JNDI, JAAS and many other integrations. (and I have no idea of what 98% of this sentence means ⚠️)
 
+
+### Task 2:
+
+- Create an user with name / surname / age / id (handle UUID)
+(atom)
+- No need for DB - use an atom
+- If a new user is added, we cannot delete the other - so it added to the vector of user
+
+Route post - Create - status 201
+Route get - list all users - status 200
+Route delete - deletes an user by ID (path param) - status 204
+Route get (path param) - gets user id , response all user info
+status success 200 / not found 404
+Route put - send id via path param and send all user info via request-body
+
+
+Nice to have:
+Route get - list all users - status 200
+Params via query params to search for users in the list 
+
 ## Getting Started
 
 1. Start the REPL
