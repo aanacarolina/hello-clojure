@@ -28,12 +28,12 @@ Jetty provides a web server and servlet container, additionally providing suppor
 - No need for DB - use an atom
 - If a new user is added, we cannot delete the other - so it added to the vector of user
 
-Route post - Create - status 201
-Route get - list all users - status 200
-Route delete - deletes an user by ID (path param) - status 204
-Route get (path param) - gets user id , response all user info
+- [ ] Route post - Create - status 201
+- [ ] Route get - list all users - status 200
+- [ ] Route delete - deletes an user by ID (path param) - status 204
+- [ ] Route get (path param) - gets user id , response all user info
 status success 200 / not found 404
-Route put - send id via path param and send all user info via request-body
+- [ ] Route put - send id via path param and send all user info via request-body
 
 
 Nice to have:
