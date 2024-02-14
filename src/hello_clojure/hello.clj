@@ -4,11 +4,9 @@
             [io.pedestal.test :as test]))
 
 (defn generate-uuid []
-  (java.util.UUID/randomUUID))
+  ())
 
-(def users (atom {1 {:name "Bart" :surname "Simpson" :age 10}
-                  2 {:name "Lisa" :surname "Simpson" :age 8}
-                  3 {:name "Selma" :surname "Bouvier" :age 46}}))
+(def users (atom {}))
 
 (defn respond-hello [request]
   (let [user-name (get-in request [:query-params :name])]
@@ -18,40 +16,43 @@
 
 (defn all-users [request]
   {:status 200
-   :body (str "List of all users: " (vals @users))})
+   :body (str "List of all users: " @users)})
 
 (defn create-user! [request]
-  (let [;uuid (ramdon-uuid)
+  (let [user-uuid (java.util.UUID/randomUUID)
         name (get-in request [:query-params :name])
         surname (get-in request [:query-params :surname])
         age  (get-in request [:query-params :age])]
-    (swap! users assoc (inc (key (last @users))) {:name name :surname surname :age age})
+    (swap! users assoc user-uuid {:name name :surname surname :age age})
     {:status 201 :body (str "new user created" (last @users))}))
 
 (defn user-by-id
     [request]
-    (let [user-id (Integer/parseInt (get-in request [:path-params :id]))
+    (let [user-id  (get-in request [:path-params :id])
+          user-uuid (java.util.UUID/fromString user-id)
           user-not-found {:status  404
                           :headers {"Content-Type" "text/plain"}
                           :body    "User not found"}]
-      (if (not (contains? @users user-id))
+      (if (not (contains? @users user-uuid))
         user-not-found
-        {:status 200 :body (@users user-id)})))
+        {:status 200 :body (@users user-uuid)})))
 
 (defn update-user!
   [request]
-  (let [user-id (Integer/parseInt (get-in request [:path-params :id]))
-         name (get-in request [:query-params :name])
+  (let [user-id (get-in request [:path-params :id])
+          user-uuid (java.util.UUID/fromString user-id)
+        name (get-in request [:query-params :name])
         surname (get-in request [:query-params :surname])
         age  (get-in request [:query-params :age])
-        user-info (:body request)]
-    (swap! users assoc user-id {:name name :surname surname :age age})
-   {:status 200 :body (str "user info updated" (@users user-id))}))
+        #_#_user-info (:body request)]
+    (swap! users assoc user-uuid {:name name :surname surname :age age})
+   {:status 200 :body (str "user info updated" (@users user-uuid))}))
 
 (defn delete-user! [request]
-  (let [user-id (Integer/parseInt (get-in request [:path-params :id]))]
-    (swap! users dissoc user-id)
-    {:status 204 :body (str "User id # " user-id ": deleted!")}))
+  (let [user-id (get-in request [:path-params :id])
+        user-uuid (java.util.UUID/fromString user-id)]
+    (swap! users dissoc user-uuid)
+    {:status 204 :body (str "User id # " user-uuid ": deleted!")}))
 
 (def routes
   (route/expand-routes
@@ -97,12 +98,15 @@
 
   (reset-server)
 
-  (println (test-request :post "/users?name=Fulaninho&surname=DeTal&age=4"))
+  (println (test-request :post "/users?name=Bart&surname=Simpson&age=10"))
+  (println (test-request :post "/users?name=Lisa&surname=Simpson&age=8"))
+  (println (test-request :post "/users?name=Selma&surname=Bouvier&age=46"))
+  (println (test-request :post "/users?name=TEST&surname=Bouvier&age=46"))
   (println (test-request :get "/users"))
-  (println (test-request :get "/users/20"))
+  (println (test-request :get "/users/7c22931a-24b1-4f16-8aa4-934851062637"))
   (println (test-request :put "/users/2"))
-  (println (test-request :delete "/users/1"))
-  (println (test-request :put "/users/1?name=Homer&surname=Simpson&age=40"))
+  (println (test-request :delete "/users/aaa636e5-2391-4400-a8b3-2b8f5a273024"))
+  (println (test-request :put "/users/38ce74e5-2c28-473b-aef5-010c275c7027?name=Homer&surname=Simpson&age=40"))
   (test-request :get "/hello")
   @users
 
