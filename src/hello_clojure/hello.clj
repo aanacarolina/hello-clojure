@@ -33,7 +33,7 @@
     (let [user-id (Integer/parseInt (get-in request [:path-params :id]))
           user-not-found {:status  404
                           :headers {"Content-Type" "text/plain"}
-                          :body    "Oxe! Kd?"}]
+                          :body    "User not found"}]
       (if (not (contains? @users user-id))
         user-not-found
         {:status 200 :body (@users user-id)})))
@@ -44,7 +44,7 @@
 (defn delete-user [request]
   (let [user-id (Integer/parseInt (get-in request [:path-params :id]))]
     (swap! users dissoc user-id)
-    {:status 200 :body (str "deleted!!!!\n\n\n\n\n\n\n" user-id "deleted!!!!\n\n\n\n\n\n\n")}))
+    {:status 200 :body (str "User id # " user-id ": deleted!")}))
 
 
 (def routes
@@ -93,7 +93,7 @@
 
   (println (test-request :post "/users?name=Fulaninho&surname=DeTal&age=4"))
   (println (test-request :get "/users"))
-  (println (test-request :get "/users/1"))
+  (println (test-request :get "/users/20"))
   (println (test-request :delete "/users/1"))
   (test-request :get "/hello")
   @users
