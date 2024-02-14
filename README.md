@@ -9,9 +9,17 @@
 - Response content: Hello, {name}! 
 - Response status: 200
 
-| route  | method | 
-|--------|--------|
-| /hello | get    | 
+| route       | method | type   | description                                                       |
+|-------------|--------|--------|-------------------------------------------------------------------|
+| /hello      | get    | query  | say hello to user, if provided name, otherwise you are a stranger |
+| /users      | get    | -      | returns all users in the database                                 |
+| /users      | post   | body   | creates a new user with the provided name, surname, and age       |
+| /users/:id  | get    | path   | returns the user with the specified UUID                          |
+| /users/     | get    | query  | returns the user with the specified UUID, name, surname, or age   |
+| /users/:id  | put    | body   | updates the user with the specified UUID                          |
+| /users/:id  | delete | path   | deletes the user with the specified UUID                          |
+
+
 
 ### Question:
 
@@ -47,5 +55,5 @@ not yet - Params via query params to search for users in the list
 3. Start the server - run `start` function
 4. Go to [http://localhost:7171/hello?name=YourNameHere](http://localhost:7171/hello?name=Carol) to see: `Hello, {name}!`
 
-
+Alternatively you can run the test-request functions provided.
 
