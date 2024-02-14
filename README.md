@@ -30,15 +30,15 @@ Jetty provides a web server and servlet container, additionally providing suppor
 
 - [x] Route post - Create - status 201
 - [x] Route get - list all users - status 200
-- [ ] Route delete - deletes an user by ID (path param) - status 204
-- [ ] Route get (path param) - gets user id , response all user info
+- [x] Route delete - deletes an user by ID (path param) - status 204
+- [x] Route get (path param) - gets user id , response all user info
 status success 200 / not found 404
-- [ ] Route put - send id via path param and send all user info via request-body
+- [?] Route put - send id via path param and send all user info via request-body
 
 
 Nice to have:
-Route get - list all users - status 200
-Params via query params to search for users in the list 
+ok - Route get - list all users - status 200
+not yet - Params via query params to search for users in the list 
 
 ## Getting Started
 

@@ -20,7 +20,7 @@
   {:status 200
    :body (str "List of all users: " (vals @users))})
 
-(defn create-user [request]
+(defn create-user! [request]
   (let [;uuid (ramdon-uuid)
         name (get-in request [:query-params :name])
         surname (get-in request [:query-params :surname])
@@ -38,23 +38,29 @@
         user-not-found
         {:status 200 :body (@users user-id)})))
 
-(defn put-user! [request]
-  {:status 200 :body (str "put user")})
+(defn update-user!
+  [request]
+  (let [user-id (Integer/parseInt (get-in request [:path-params :id]))
+         name (get-in request [:query-params :name])
+        surname (get-in request [:query-params :surname])
+        age  (get-in request [:query-params :age])
+        user-info (:body request)]
+    (swap! users assoc user-id {:name name :surname surname :age age})
+   {:status 200 :body (str "user info updated" (@users user-id))}))
 
-(defn delete-user [request]
+(defn delete-user! [request]
   (let [user-id (Integer/parseInt (get-in request [:path-params :id]))]
     (swap! users dissoc user-id)
-    {:status 200 :body (str "User id # " user-id ": deleted!")}))
-
+    {:status 204 :body (str "User id # " user-id ": deleted!")}))
 
 (def routes
   (route/expand-routes
    #{["/hello" :get respond-hello :route-name :hello]
      ["/users" :get all-users :route-name :users]
-     ["/users" :post create-user :route-name :create-user]
+     ["/users" :post create-user! :route-name :create-user]
      ["/users/:id" :get user-by-id :route-name :user-by-id]
-     ["/users/:id" :put put-user! :route-name :put-user]
-     ["/users/:id" :delete delete-user :route-name :delete-user]}))
+     ["/users/:id" :put update-user! :route-name :update-user]
+     ["/users/:id" :delete delete-user! :route-name :delete-user]}))
 
 (defn create-server []
   (http/create-server
@@ -94,7 +100,9 @@
   (println (test-request :post "/users?name=Fulaninho&surname=DeTal&age=4"))
   (println (test-request :get "/users"))
   (println (test-request :get "/users/20"))
+  (println (test-request :put "/users/2"))
   (println (test-request :delete "/users/1"))
+  (println (test-request :put "/users/1?name=Homer&surname=Simpson&age=40"))
   (test-request :get "/hello")
   @users
 
