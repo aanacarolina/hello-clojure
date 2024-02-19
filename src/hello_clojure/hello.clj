@@ -4,7 +4,7 @@
             [io.pedestal.test :as test]))
 
 (defn generate-uuid []
-  ())
+  (random-uuid))
 
 (def users (atom {}))
 
@@ -18,8 +18,12 @@
   {:status 200
    :body (str "List of all users: " @users)})
 
+;refactor using path-params
+;try postman (both form-data and raw/json)
+;problems: string limitations / data leak / 
+;refactor: get-in -> destructuring (less functions to the stack)
 (defn create-user! [request]
-  (let [user-uuid (java.util.UUID/randomUUID)
+  (let [user-uuid (java.util.UUID/randomUUID) ;entender pq nao vai sem interoperbilidade
         name (get-in request [:query-params :name])
         surname (get-in request [:query-params :surname])
         age  (get-in request [:query-params :age])]
@@ -48,6 +52,7 @@
        {:status 200 :body (@users user-uuid)})
    ))
 
+;melhorar depois - qdo cirar funcoes de filtro
 (defn update-user!
   [request]
   (let [user-id (get-in request [:path-params :id])
@@ -79,7 +84,7 @@
   (http/create-server
    {::http/routes routes
     ::http/type :jetty
-    ::http/port 7171
+    ::http/port 7070
     ::http/join? false}))
 
 (defonce server (atom nil))
