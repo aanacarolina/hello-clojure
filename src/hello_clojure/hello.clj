@@ -1,10 +1,9 @@
 (ns hello-clojure.hello
   (:require [io.pedestal.http :as http]
             [io.pedestal.http.route :as route]
+            [io.pedestal.http.body-params :as body-params]
             [io.pedestal.test :as test]))
 
-(defn generate-uuid []
-  (random-uuid))
 
 (def users (atom {}))
 
@@ -23,10 +22,11 @@
 ;problems: string limitations / data leak / 
 ;refactor: get-in -> destructuring (less functions to the stack)
 (defn create-user! [request]
+  (println "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n\n\n\n\n" request  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n\n\n\n\n")
   (let [user-uuid (java.util.UUID/randomUUID) ;entender pq nao vai sem interoperbilidade
-        name (get-in request [:query-params :name])
-        surname (get-in request [:query-params :surname])
-        age  (get-in request [:query-params :age])]
+        name (get-in request [:json-params :name] )
+        surname (get-in request [:json-params :surname])
+        age  (get-in request [:json-params :age])]
     (swap! users assoc user-uuid {:name name :surname surname :age age})
     {:status 201 :body (str "new user created" (last @users))}))
 
@@ -70,11 +70,14 @@
     (swap! users dissoc user-uuid)
     {:status 204 :body (str "User id # " user-uuid ": deleted!")}))
 
+(def common-interceptors [(body-params/body-params)])
+
+
 (def routes
   (route/expand-routes
    #{["/hello" :get respond-hello :route-name :hello]
      ["/users" :get all-users :route-name :users]
-     ["/users" :post create-user! :route-name :create-user]
+     ["/users" :post (conj common-interceptors create-user!) :route-name :create-user]
      ["/users/:id" :get user-by-id :route-name :user-by-id]
      ["/users/" :get query-user :route-name :query-user-by-id]
      ["/users/:id" :put update-user! :route-name :update-user]
@@ -84,7 +87,7 @@
   (http/create-server
    {::http/routes routes
     ::http/type :jetty
-    ::http/port 7070
+    ::http/port 7171
     ::http/join? false}))
 
 (defonce server (atom nil))
@@ -112,6 +115,7 @@
   (start)
 
   (stop)
+  
 
   (reset-server)
 
