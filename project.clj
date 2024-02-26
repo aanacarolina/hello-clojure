@@ -15,5 +15,5 @@
   :resource-paths ["config", "resources"] 
   :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "hello-clojure.server/run-dev"]}
                    :dependencies [[io.pedestal/pedestal.service-tools "0.6.3"]]}
-             :uberjar {:aot [hello-clojure.server]}}
-  :main ^{:skip-aot true} hello-clojure.server)
+             :uberjar {:aot [hello-clojure.hello/start]}}
+  :main ^{:skip-aot true} hello-clojure.hello/start)
