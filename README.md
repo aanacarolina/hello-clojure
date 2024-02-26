@@ -34,19 +34,35 @@ Jetty provides a web server and servlet container, additionally providing suppor
 - [x] Create an user with name / surname / age / id (handle UUID)
 (atom)
 - No need for DB - use an atom
-- If a new user is added, we cannot delete the other - so it added to the vector of user
+- If a new user is added, we cannot delete the other - so it's added to the vector of user
 
 - [x] Route post - Create - status 201
 - [x] Route get - list all users - status 200
 - [x] Route delete - deletes an user by ID (path param) - status 204
 - [x] Route get (path param) - gets user id , response all user info
 status success 200 / not found 404
-- [?] Route put - send id via path param and send all user info via request-body
+- [x] Route put - send id via path param and send all user info via request-body
 
 
 Nice to have:
-ok - Route get - list all users - status 200
-not yet - Params via query params to search for users in the list 
+- [x] Route get - list all users - status 200
+- [x] Params via query params to search for users in the list 
+
+
+### Task 3:
+Let's create a digital bank
+- [ ] Entity User wants to open a bank account (entity account)
+- [ ] Endpoint post to create account (users/id/accounts) - id via path and account via req-body
+- [ ] Return schema -> user name / type (savings and checking) / deposit (0.00) for each / operation: opening of each type / status (auto on creation: active)
+    - se chamar endpoint create de novo cria de novo.
+- [ ] Endpoint GET to get user accounts (users/id/accounts) - id via path and account via req-body
+- [ ] Endpoint GET to get user deposits for a specific account type (users/id/accounts/id/type) - id via path and account via req-body (an account can be both saving AND checking) (carol PF (poup e cc) e PJ )
+;type can be an entity (polymorphism)
+
+Nice to have
+- [ ] query da poupanca os depositos de um periodo (still no deposits)
+- [ ] MGM bonus deposit of 100 when creating 
+
 
 ## Getting Started
 
