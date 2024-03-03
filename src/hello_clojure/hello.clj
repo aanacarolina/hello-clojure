@@ -59,7 +59,7 @@
 
 ;melhorar depois - qdo cirar funcoes de filtro
 (defn update-user!
-  [request]
+  [request] 
   (let [user-id (get-in request [:path-params :id])
         user-uuid (java.util.UUID/fromString user-id)
         {{:keys [name surname age]} :json-params} request]
@@ -78,38 +78,41 @@
 (def accounts (atom {}))
 
 (defn response-create-account-200
-  [user-name account-status account-id account-type deposit]
+  [user-uuid account-status account-id account-type deposit]
     {:status  200
      :headers {"Content-Type" "text/plain"}
-     :body (str "Account successfuly created for " user-name "\n" 
+     :body (str "Account successfuly created for " user-uuid "\n" 
                 "Account ID: " account-id "\n"
                 "Account status: " account-status "\n"
                 "Account type: " account-type  "\n"
                 "A balance of R$" deposit "\n"
                 "Great Success ⭐ \n")})
 
-#_(def response-404
+(def response-404
     {:status  404
      :headers {"Content-Type" "text/plain"}
-     :body    "User not found ❌"})
+     :body    "Can't open account. User not found ❌"})
 
 (defn create-account!
   [request]
   (let [account-uuid (java.util.UUID/randomUUID)
-        {{:keys [user-name account-status account-type deposit]} :json-params} request]
-    (swap! accounts assoc account-uuid {:user-name user-name :status account-status :type account-type :deposit deposit})
-      (response-create-account-200 user-name account-status account-uuid account-type deposit)))
+        {{:keys [user-id account-status account-type deposit]} :json-params} request
+        user-uuid (java.util.UUID/fromString user-id)]
+    (if-not (contains? @users user-uuid)
+      response-404
+      (do (swap! accounts assoc account-uuid {:user-uuid user-uuid :status account-status :type account-type :deposit deposit})
+      (response-create-account-200 (:name (@users user-uuid)) account-status account-uuid account-type deposit)))))
 
 (defn user-accounts [request]
-  ; [state {:keys [name description]}] 
-  ; [{{:keys [name surname age]} :json-params} request]
-  {:status 200 :body "user-accounts 📒"})
+  (let [account-type (:account-type (accounts (get-in request [:path-params :id])))]
+    {:status 200 :body account-type}))
+
 
 (defn user-deposits-by-account [request]
   {:status 200 :body "user-deposits-by-account 🏧"})
 
 
-;======================== INTERCEPTORS =====================
+;======================== ROUTES & INTERCEPTORS =====================
 
 (def common-interceptors [(body-params/body-params)])
 ;duvida: criar um outro def? entity-routes e add to ::http/routes
@@ -167,14 +170,17 @@
 
 (comment
   (start)
-  (stop)
+  (stop)  
   (reset-server)
 
-  (println (test-request :delete "/users/4c1e6f95-8875-4a90-ae06-799151834500"))
-  (println (test-request :put "/users/38ce74e5-2c28-473b-aef5-010c275c7027?name=Homer&surname=Simpson&age=40"))
+  ;(println (test-request :delete "/users/4c1e6f95-8875-4a90-ae06-799151834500"))
+  
   (test-request-post :post "/users" {:json-params {:name "John", :surname "Doe", :age 30}} {"Content-Type" "text/plain"})
   (test-request :get "/hello")
+  (:name (@users #uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" ))
+  (java.util.UUID/fromString "11e735a5-feaa-458a-8c62-449ba5aa60dc")
   @users
   @accounts
+
   
   )
