@@ -4,6 +4,7 @@
             [io.pedestal.http.body-params :as body-params]
             [io.pedestal.test :as test]))
 
+;======================== USERS =====================
 
 (def users (atom {}))
 
@@ -68,8 +69,46 @@
     (swap! users dissoc user-uuid)
     {:status 204 :body (str "User id # " user-uuid ": deleted!")}))
 
-(def common-interceptors [(body-params/body-params)])
 
+;======================== ACCOUNT =====================
+
+(def accounts (atom {}))
+
+#_(def response-create-account-200
+  {:status  200
+   :headers {"Content-Type" "text/plain"}
+   :body (str "Account successfuly created for " user-name "\n"
+              "Account status: " account-status "\n"
+              "Account type: " account-type  "\n"
+              "A balance of R$" deposit "\n"
+              "Great Success ⭐ \n")})
+
+#_(def response-404
+  {:status  404
+   :headers {"Content-Type" "text/plain"}
+   :body    "User not found ❌"})
+
+(defn create-account!
+  [request]
+  #_(let [account-id (java.util.UUID/randomUUID)
+          name (request)
+          account-type ( request)]
+      response-create-account-200)
+   {:status 200 :body "create-account! 💲"})
+
+(defn user-accounts [request]
+  ; [state {:keys [name description]}] 
+  ; [{{:keys [name surname age]} :json-params} request]
+  {:status 200 :body "user-accounts 📒"})
+
+(defn user-deposits-by-account [request]
+  {:status 200 :body "user-deposits-by-account 🏧"})
+
+
+;======================== INTERCEPTORS =====================
+
+(def common-interceptors [(body-params/body-params)])
+;duvida: criar um outro def? entity-routes e add to ::http/routes
 (def routes
   (route/expand-routes
    #{["/hello" :get respond-hello :route-name :hello]
@@ -78,7 +117,13 @@
      ["/users/:id" :get user-by-id :route-name :user-by-id]
      ["/users/q" :get query-user :route-name :query-user-by-id]
      ["/users/:id" :put (conj common-interceptors update-user!) :route-name :update-user]
-     ["/users/:id" :delete delete-user! :route-name :delete-user]}))
+     ["/users/:id" :delete delete-user! :route-name :delete-user]
+     ;accounts starts here
+     ["/accounts" :post create-account! :route-name :create-account]
+     ["/users/:id/accounts/" :get user-accounts :route-name :user-accounts]
+     ["/users/:id/accounts/:id/type" :get user-deposits-by-account :route-name :user-deposits-by-account]}))
+
+;======================== SERVER =====================
 
 (defn create-server []
   (http/create-server
@@ -88,10 +133,6 @@
     ::http/join? false}))
 
 (defonce server (atom nil))
-
-;integration test
-(defn test-request [verb url]
-  (test/response-for (::http/service-fn @server) verb url))
 
 (defn start []
   (try
@@ -108,6 +149,15 @@
 (defn reset-server []
   (stop)
   (start))
+
+;======================== TESTS =====================
+
+;integration test
+(defn test-request [verb url]
+  (test/response-for (::http/service-fn @server) verb url))
+
+
+;======================== COMMENT =====================
 
 (comment
   (start) 
