@@ -6,7 +6,11 @@
 
 ;======================== USERS =====================
 
-(def users (atom {}))
+(def users (atom  {#uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" {:name "Chaves", :surname "S." :age 8}
+                   #uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc" {:name "Quico" :surname "S." :age 7}
+                   #uuid "4b96037f-f9a3-490f-99f3-5f9b32006edc" {:name "Chiquinha" :surname "S." :age 7}
+                   #uuid "fb3281be-11c4-4907-83d0-722df301032f" {:name "Seu Madruga" :surname "S." :age 42}
+                   #uuid "457d6d45-0d79-45c8-a743-892170ce356d" {:name "Dona Florinda" :surname "S." :age 35}}))
 
 (defn respond-hello [request]
   (let [user-name (get-in request [:query-params :name])]
@@ -50,9 +54,8 @@
         surname (get-in request [:query-params :surname])
         age  (get-in request [:query-params :age])]
     (if (contains? @users (or user-uuid name surname age))
-       {:status 200 :body (@users user-uuid)}
-      {:status 200 :body (str "Info provided not found in the user base")})
-   ))
+      {:status 200 :body (@users user-uuid)}
+      {:status 200 :body (str "Info provided not found in the user base")})))
 
 ;melhorar depois - qdo cirar funcoes de filtro
 (defn update-user!
@@ -74,27 +77,28 @@
 
 (def accounts (atom {}))
 
-#_(def response-create-account-200
-  {:status  200
-   :headers {"Content-Type" "text/plain"}
-   :body (str "Account successfuly created for " user-name "\n"
-              "Account status: " account-status "\n"
-              "Account type: " account-type  "\n"
-              "A balance of R$" deposit "\n"
-              "Great Success ⭐ \n")})
+(defn response-create-account-200
+  [user-name account-status account-id account-type deposit]
+    {:status  200
+     :headers {"Content-Type" "text/plain"}
+     :body (str "Account successfuly created for " user-name "\n" 
+                "Account ID: " account-id "\n"
+                "Account status: " account-status "\n"
+                "Account type: " account-type  "\n"
+                "A balance of R$" deposit "\n"
+                "Great Success ⭐ \n")})
 
 #_(def response-404
-  {:status  404
-   :headers {"Content-Type" "text/plain"}
-   :body    "User not found ❌"})
+    {:status  404
+     :headers {"Content-Type" "text/plain"}
+     :body    "User not found ❌"})
 
 (defn create-account!
   [request]
-  #_(let [account-id (java.util.UUID/randomUUID)
-          name (request)
-          account-type ( request)]
-      response-create-account-200)
-   {:status 200 :body "create-account! 💲"})
+  (let [account-uuid (java.util.UUID/randomUUID)
+        {{:keys [user-name account-status account-type deposit]} :json-params} request]
+    (swap! accounts assoc account-uuid {:user-name user-name :status account-status :type account-type :deposit deposit})
+      (response-create-account-200 user-name account-status account-uuid account-type deposit)))
 
 (defn user-accounts [request]
   ; [state {:keys [name description]}] 
@@ -119,8 +123,8 @@
      ["/users/:id" :put (conj common-interceptors update-user!) :route-name :update-user]
      ["/users/:id" :delete delete-user! :route-name :delete-user]
      ;accounts starts here
-     ["/accounts" :post create-account! :route-name :create-account]
-     ["/users/:id/accounts/" :get user-accounts :route-name :user-accounts]
+     ["/accounts" :post (conj common-interceptors create-account!) :route-name :create-account]
+     ["/users/:id/accounts" :get user-accounts :route-name :user-accounts]
      ["/users/:id/accounts/:id/type" :get user-deposits-by-account :route-name :user-deposits-by-account]}))
 
 ;======================== SERVER =====================
@@ -156,16 +160,21 @@
 (defn test-request [verb url]
   (test/response-for (::http/service-fn @server) verb url))
 
+(defn test-request-post [verb url body headers]
+  (test/response-for (::http/service-fn @server) verb url body headers))
 
 ;======================== COMMENT =====================
 
 (comment
-  (start) 
-  (stop) 
+  (start)
+  (stop)
   (reset-server)
 
   (println (test-request :delete "/users/4c1e6f95-8875-4a90-ae06-799151834500"))
   (println (test-request :put "/users/38ce74e5-2c28-473b-aef5-010c275c7027?name=Homer&surname=Simpson&age=40"))
+  (test-request-post :post "/users" {:json-params {:name "John", :surname "Doe", :age 30}} {"Content-Type" "text/plain"})
   (test-request :get "/hello")
   @users
+  @accounts
+  
   )
