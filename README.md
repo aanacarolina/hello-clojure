@@ -64,6 +64,20 @@ Nice to have
 - [ ] MGM bonus deposit of 100 when creating 
 
 
+#_{:account/user-id 
+ :account/id 
+ :account/status
+ :account/type
+ :account/amount 
+ }
+
+#_{:user/id
+ :user/name
+ :user/surname
+ :user/age
+ :user/accounts [ ]
+}
+
 ## Getting Started
 
 1. Start the REPL
