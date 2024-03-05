@@ -6,7 +6,7 @@
 
 ;======================== USERS =====================
 
-(def users (atom  {#uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" {:name "Chaves", :surname "S." :age 8}
+(def users (atom  {#uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" {:name "Chaves", :surname "S." :age 8 }
                    #uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc" {:name "Quico" :surname "S." :age 7}
                    #uuid "4b96037f-f9a3-490f-99f3-5f9b32006edc" {:name "Chiquinha" :surname "S." :age 7}
                    #uuid "fb3281be-11c4-4907-83d0-722df301032f" {:name "Seu Madruga" :surname "S." :age 42}
@@ -87,29 +87,44 @@
                 "Account type: " account-type  "\n"
                 "A balance of R$" deposit "\n"
                 "Great Success ⭐ \n")})
+;this needs to be shown for each account - returns now a map with info for each
 
 (def response-404
     {:status  404
      :headers {"Content-Type" "text/plain"}
      :body    "Can't open account. User not found ❌"})
 
+(defn response-500 [error-msg]
+    {:status  500
+     :headers {"Content-Type" "text/plain"}
+     :body    error-msg})
+
+;TODO - balance for each account
 (defn create-account!
   [request]
   (let [account-uuid (java.util.UUID/randomUUID)
-        {{:keys [user-id account-status account-type deposit]} :json-params} request
+        {json :json-params} request
+        user-id (get-in request [:path-params :user-id])
         user-uuid (java.util.UUID/fromString user-id)]
-    (if-not (contains? @users user-uuid)
-      response-404
-      (do (swap! accounts assoc account-uuid {:user-uuid user-uuid :status account-status :type account-type :deposit deposit})
-      (response-create-account-200 (:name (@users user-uuid)) account-status account-uuid account-type deposit)))))
+    (println json)
+    #_(try (if-not (contains? @users user-uuid)
+           response-404
+           (do (swap! accounts assoc account-uuid {:user-uuid user-uuid :status account-status :type account-type :deposit deposit})
+               (response-create-account-200 (:name (@users user-uuid)) account-status account-uuid account-type deposit)))
+         (catch Exception e  
+           (response-500 (.getMessage e))))))
+
 
 (defn user-accounts [request]
-  (let [account-type (:account-type (accounts (get-in request [:path-params :id])))]
-    {:status 200 :body account-type}))
+  (let [user-id (get-in request [:path-params :id])
+        user-uuid (java.util.UUID/fromString user-id)
+        account-type [0 0]] 
+    {:status 200 :body (str "This user has " (count account-type) "account(s): " account-type)}))
 
 
 (defn user-deposits-by-account [request]
   {:status 200 :body "user-deposits-by-account 🏧"})
+
 
 
 ;======================== ROUTES & INTERCEPTORS =====================
@@ -126,9 +141,9 @@
      ["/users/:id" :put (conj common-interceptors update-user!) :route-name :update-user]
      ["/users/:id" :delete delete-user! :route-name :delete-user]
      ;accounts starts here
-     ["/accounts" :post (conj common-interceptors create-account!) :route-name :create-account]
-     ["/users/:id/accounts" :get user-accounts :route-name :user-accounts]
-     ["/users/:id/accounts/:id/type" :get user-deposits-by-account :route-name :user-deposits-by-account]}))
+     ["/accounts/:user-id" :post (conj common-interceptors create-account!) :route-name :create-account]
+    #_["/users/:user-id/account" :get user-accounts :route-name :user-accounts]
+     #_["/users/:user-id/account/:account-id/type" :get user-deposits-by-account :route-name :user-deposits-by-account]}))
 
 ;======================== SERVER =====================
 
@@ -179,8 +194,13 @@
   (test-request :get "/hello")
   (:name (@users #uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" ))
   (java.util.UUID/fromString "11e735a5-feaa-458a-8c62-449ba5aa60dc")
+  ; (filter #(= (:user-uuid (val %)) user-uuid) accounts)
   @users
   @accounts
 
   
+  
   )
+
+
+ 
