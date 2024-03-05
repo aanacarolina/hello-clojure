@@ -78,12 +78,12 @@
 (def accounts (atom {}))
 
 (defn response-create-account-200
-  [user-uuid account-status account-id account-type deposit]
+  [user-uuid account-id account-type deposit]
     {:status  200
      :headers {"Content-Type" "text/plain"}
-     :body (str "Account successfuly created for " user-uuid "\n" 
+     :body (str "Account successfuly created for " user-uuid "\n"
                 "Account ID: " account-id "\n"
-                "Account status: " account-status "\n"
+                "Account status: Active \n"
                 "Account type: " account-type  "\n"
                 "A balance of R$" deposit "\n"
                 "Great Success ⭐ \n")})
@@ -103,14 +103,14 @@
 (defn create-account!
   [request]
   (let [account-uuid (java.util.UUID/randomUUID)
-        {json :json-params} request
+        {{:keys [account-type deposit]} :json-params} request
         user-id (get-in request [:path-params :user-id])
-        user-uuid (java.util.UUID/fromString user-id)]
-    (println json)
-    #_(try (if-not (contains? @users user-uuid)
+        user-uuid (java.util.UUID/fromString user-id)] 
+    (try (if-not (contains? @users user-uuid)
            response-404
-           (do (swap! accounts assoc account-uuid {:user-uuid user-uuid :status account-status :type account-type :deposit deposit})
-               (response-create-account-200 (:name (@users user-uuid)) account-status account-uuid account-type deposit)))
+           (do (swap! accounts assoc account-uuid {:user-uuid user-uuid :status "Active" :type account-type :deposit deposit})
+               (swap! users  assoc-in [user-uuid :account] (get-in request [:request :json-params]))
+               (response-create-account-200 (:name (@users user-uuid)) account-uuid account-type deposit)))
          (catch Exception e  
            (response-500 (.getMessage e))))))
 
@@ -198,9 +198,9 @@
   @users
   @accounts
 
-  
-  
+  (def mock-req {:request {:json-params '({:account-type "checking", :deposit 0} {:account-type "savings", :deposit 0})}})
+  (get-in mock-req [:request :json-params])
+  (swap! users  assoc-in [user-uuid :account] (get-in mock-req [:request :json-params]))
+  (swap! users  assoc-in [#uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"  :account] '({:account-type "checking", :deposit 10} {:account-type "savings", :deposit 10}))
+
   )
-
-
- 
