@@ -105,16 +105,20 @@
   (let [account-uuid (java.util.UUID/randomUUID)
         {{:keys [account-type deposit]} :json-params} request
         user-id (get-in request [:path-params :user-id])
-        user-uuid (java.util.UUID/fromString user-id)] 
+        user-uuid (java.util.UUID/fromString user-id)
+        json request] 
+    (println "\n\n\n\n\n\n\n❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗" request  "❗❗❗❗❗❗❗❗❗❗\n\n\n\n\n\n\n")
     (try (if-not (contains? @users user-uuid)
            response-404
            (do (swap! accounts assoc user-uuid  {:account-uuid account-uuid :status "Active" :type account-type :deposit deposit})
-               (swap! users assoc-in [user-uuid :account] (get-in request [:request :json-params]))
+               (swap! users assoc-in [user-uuid :account [(get-in request [:request :json-params])]] (get-in request [:request :json-params]) )
                (response-create-account-200 (:name (@users user-uuid)) account-uuid account-type deposit)))
          (catch Exception e  
            (response-500 (.getMessage e))))))
 ;[x] todo id de account vai ser o od usuario
 ; e ai tem um mapa para cada account
+;current response #uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" {:name "Chaves", :surname "S.", :age 8, :account {[nil] nil}},
+
 ;ja esta criando mas ainda com valores nil 
 
 
@@ -205,5 +209,6 @@
   (get-in mock-req [:request :json-params])
   (swap! users  assoc-in [user-uuid :account] (get-in mock-req [:request :json-params]))
   (swap! users  assoc-in [#uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"  :account] '({:account-type "checking", :deposit 10} {:account-type "savings", :deposit 10}))
+  
 
   )
