@@ -108,11 +108,14 @@
         user-uuid (java.util.UUID/fromString user-id)] 
     (try (if-not (contains? @users user-uuid)
            response-404
-           (do (swap! accounts assoc account-uuid {:user-uuid user-uuid :status "Active" :type account-type :deposit deposit})
-               (swap! users  assoc-in [user-uuid :account] (get-in request [:request :json-params]))
+           (do (swap! accounts assoc user-uuid  {:account-uuid account-uuid :status "Active" :type account-type :deposit deposit})
+               (swap! users assoc-in [user-uuid :account] (get-in request [:request :json-params]))
                (response-create-account-200 (:name (@users user-uuid)) account-uuid account-type deposit)))
          (catch Exception e  
            (response-500 (.getMessage e))))))
+;[x] todo id de account vai ser o od usuario
+; e ai tem um mapa para cada account
+;ja esta criando mas ainda com valores nil 
 
 
 (defn user-accounts [request]
@@ -195,7 +198,7 @@
   (:name (@users #uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" ))
   (java.util.UUID/fromString "11e735a5-feaa-458a-8c62-449ba5aa60dc")
   ; (filter #(= (:user-uuid (val %)) user-uuid) accounts)
-  @users
+  @users 
   @accounts
 
   (def mock-req {:request {:json-params '({:account-type "checking", :deposit 0} {:account-type "savings", :deposit 0})}})
