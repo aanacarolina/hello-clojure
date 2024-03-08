@@ -111,7 +111,7 @@
     (try (if-not (contains? @users user-uuid)
            response-404
            (do (swap! accounts assoc user-uuid  {:account-uuid account-uuid :status "Active" :type account-type :deposit deposit})
-               (swap! users assoc-in [user-uuid :account [(get-in request [:request :json-params])]] (get-in request [:request :json-params]) )
+               (swap! users assoc-in [user-uuid :account ] (vec (get-in request [:json-params])) )
                (response-create-account-200 (:name (@users user-uuid)) account-uuid account-type deposit)))
          (catch Exception e  
            (response-500 (.getMessage e))))))
@@ -192,6 +192,7 @@
 
 (comment
   (start)
+
   (stop)  
   (reset-server)
 
