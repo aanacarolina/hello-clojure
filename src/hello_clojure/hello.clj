@@ -78,14 +78,11 @@
 (def accounts (atom {}))
 
 (defn response-create-account-200
-  [user-uuid account-id account-type deposit]
+  [user-uuid ]
     {:status  200
      :headers {"Content-Type" "text/plain"}
-     :body (str "Account successfuly created for " user-uuid "\n"
-                "Account ID: " account-id "\n"
-                "Account status: Active \n"
-                "Account type: " account-type  "\n"
-                "A balance of R$" deposit "\n"
+     :body (str "Account successfuly created for " (:name (@users user-uuid)) "\n"
+                "Account(s) details: " (get @accounts user-uuid) "\n"
                 "Great Success ⭐ \n")})
 ;this needs to be shown for each account - returns now a map with info for each
 
@@ -102,25 +99,21 @@
 ;TODO - balance for each account
 (defn create-account!
   [request]
-  (let [account-uuid (java.util.UUID/randomUUID)
-        {{:keys [account-type deposit]} :json-params} request
-        user-id (get-in request [:path-params :user-id])
+  (let [user-id (get-in request [:path-params :user-id])
         user-uuid (java.util.UUID/fromString user-id)
-        json request] 
-    (println "\n\n\n\n\n\n\n❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗" request  "❗❗❗❗❗❗❗❗❗❗\n\n\n\n\n\n\n")
+        accounts-info (:json-params request)]
     (try (if-not (contains? @users user-uuid)
            response-404
-           (do (swap! accounts assoc user-uuid  {:account-uuid account-uuid :status "Active" :type account-type :deposit deposit})
-               (swap! users assoc-in [user-uuid :account ] (vec (get-in request [:json-params])) )
-               (response-create-account-200 (:name (@users user-uuid)) account-uuid account-type deposit)))
-         (catch Exception e  
+           (let [created-accounts (for [{:keys [account-type deposit]} accounts-info]
+                                    {:account-uuid (java.util.UUID/randomUUID)
+                                     :status "Active"
+                                     :type account-type
+                                     :amount deposit})]
+             (do (swap! accounts assoc user-uuid (vec created-accounts))
+                 (swap! users assoc-in [user-uuid :accounts] (vec (map :account-uuid (get @accounts user-uuid))))
+                 (response-create-account-200  user-uuid))))
+         (catch Exception e
            (response-500 (.getMessage e))))))
-;[x] todo id de account vai ser o od usuario
-; e ai tem um mapa para cada account
-;current response #uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" {:name "Chaves", :surname "S.", :age 8, :account {[nil] nil}},
-
-;ja esta criando mas ainda com valores nil 
-
 
 (defn user-accounts [request]
   (let [user-id (get-in request [:path-params :id])
@@ -192,9 +185,11 @@
 
 (comment
   (start)
-
   (stop)  
   (reset-server)
+  
+  @users 
+  @accounts 
 
   ;(println (test-request :delete "/users/4c1e6f95-8875-4a90-ae06-799151834500"))
   
@@ -202,14 +197,11 @@
   (test-request :get "/hello")
   (:name (@users #uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" ))
   (java.util.UUID/fromString "11e735a5-feaa-458a-8c62-449ba5aa60dc")
-  ; (filter #(= (:user-uuid (val %)) user-uuid) accounts)
-  @users 
-  @accounts
-
-  (def mock-req {:request {:json-params '({:account-type "checking", :deposit 0} {:account-type "savings", :deposit 0})}})
-  (get-in mock-req [:request :json-params])
-  (swap! users  assoc-in [user-uuid :account] (get-in mock-req [:request :json-params]))
-  (swap! users  assoc-in [#uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"  :account] '({:account-type "checking", :deposit 10} {:account-type "savings", :deposit 10}))
+ 
+(def mock-accs {#uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"
+                [{:account-uuid #uuid "c2d003cd-a14f-4546-b2e1-0c3681bf8c12", :status "Active", :type "checking", :amount 0}
+                 {:account-uuid #uuid "b646dbe2-fad2-47b7-bdaa-5b7fd8a8b484", :status "Active", :type "savings", :amount 0}]})
   
+(   map (:account-uuid #uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc") mock-accs)
 
   )
