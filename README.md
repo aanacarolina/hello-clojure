@@ -55,8 +55,8 @@ Let's create a digital bank
 - [x] Endpoint post to create account (users/id/accounts) - id via path and account via req-body
 - [x] Return schema -> user name / type (savings and checking) / deposit (0.00) for each / operation: opening of each type / status (auto on creation: active)
 - [x] se chamar endpoint create de novo cria de novo.
-- [ ] Endpoint GET to get user accounts (users/id/accounts) - id via path and account via req-body
-- [ ] Endpoint GET to get user deposits for a specific account type (users/id/accounts/id/type) - id via path and account via req-body (an account can be both saving AND checking) (carol PF (poup e cc) e PJ )
+- [x] Endpoint GET to get user accounts (users/id/accounts) - id via path and account via req-body
+- [ ] Endpoint GET to get user deposits for a specific account type (users/id/accounts/id/type) - id via path and account via req-body (an account can be both saving AND checking) ~~(carol PF (poup e cc) e PJ )~~
 ;type can be an entity (polymorphism)
 
 Nice to have

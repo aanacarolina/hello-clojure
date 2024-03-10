@@ -6,7 +6,7 @@
 
 ;======================== USERS =====================
 
-(def users (atom  {#uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" {:name "Chaves", :surname "S." :age 8 }
+(def users (atom  {#uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" {:name "Chaves", :surname "S." :age 8}
                    #uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc" {:name "Quico" :surname "S." :age 7}
                    #uuid "4b96037f-f9a3-490f-99f3-5f9b32006edc" {:name "Chiquinha" :surname "S." :age 7}
                    #uuid "fb3281be-11c4-4907-83d0-722df301032f" {:name "Seu Madruga" :surname "S." :age 42}
@@ -59,7 +59,7 @@
 
 ;melhorar depois - qdo cirar funcoes de filtro
 (defn update-user!
-  [request] 
+  [request]
   (let [user-id (get-in request [:path-params :id])
         user-uuid (java.util.UUID/fromString user-id)
         {{:keys [name surname age]} :json-params} request]
@@ -78,23 +78,23 @@
 (def accounts (atom {}))
 
 (defn response-create-account-200
-  [user-uuid ]
-    {:status  200
-     :headers {"Content-Type" "text/plain"}
-     :body (str "Account successfuly created for " (:name (@users user-uuid)) "\n"
-                "Account(s) details: " (get @accounts user-uuid) "\n"
-                "Great Success ⭐ \n")})
+  [user-uuid]
+  {:status  200
+   :headers {"Content-Type" "text/plain"}
+   :body (str "Account successfuly created for " (:name (@users user-uuid)) "\n"
+              "Account(s) details: " (get @accounts user-uuid) "\n"
+              "Great Success ⭐ \n")})
 ;this needs to be shown for each account - returns now a map with info for each
 
 (def response-404
-    {:status  404
-     :headers {"Content-Type" "text/plain"}
-     :body    "Can't open account. User not found ❌"})
+  {:status  404
+   :headers {"Content-Type" "text/plain"}
+   :body    "Not found ❌"})
 
 (defn response-500 [error-msg]
-    {:status  500
-     :headers {"Content-Type" "text/plain"}
-     :body    error-msg})
+  {:status  500
+   :headers {"Content-Type" "text/plain"}
+   :body    error-msg})
 
 ;TODO - balance for each account
 (defn create-account!
@@ -117,8 +117,11 @@
 
 (defn user-accounts [request]
   (let [user-id (get-in request [:path-params :user-id])
-        user-uuid (java.util.UUID/fromString user-id)] 
-    (try {:status 200 :body (str "This user has the following accounts: " (map :type (get @accounts user-uuid)))}
+        user-uuid (java.util.UUID/fromString user-id)
+        user-accounts (vec (map :type (get @accounts user-uuid)))]
+    (try (if-not (nil? (get @accounts user-uuid))
+           {:status 200 :body (str "This user has the following accounts: " user-accounts)}
+           response-404)
          (catch Exception e
            (response-500 (.getMessage e))))))
 
@@ -144,6 +147,7 @@
      ;accounts starts here
      ["/accounts/:user-id" :post (conj common-interceptors create-account!) :route-name :create-account]
      ["/user/account/:user-id" :get user-accounts :route-name :user-accounts]
+     ;need to make deposit to have a history - to display the amount just change route above with :amount instead of :type 
      #_["/users/:user-id/account/:account-id/type" :get user-deposits-by-account :route-name :user-deposits-by-account]}))
 
 ;======================== SERVER =====================
@@ -186,23 +190,32 @@
 
 (comment
   (start)
-  (stop)  
+  (stop)
   (reset-server)
-  
-  @users 
-  @accounts 
+
+  @users
+  @accounts
 
   ;(println (test-request :delete "/users/4c1e6f95-8875-4a90-ae06-799151834500"))
-  
+
   (test-request-post :post "/users" {:json-params {:name "John", :surname "Doe", :age 30}} {"Content-Type" "text/plain"})
   (test-request :get "/hello")
-  (:name (@users #uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" ))
+  (:name (@users #uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc"))
   (java.util.UUID/fromString "11e735a5-feaa-458a-8c62-449ba5aa60dc")
-  
+
   (def mock-accs {#uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"
                   [{:account-uuid #uuid "c2d003cd-a14f-4546-b2e1-0c3681bf8c12", :status "Active", :type "checking", :amount 0}
                    {:account-uuid #uuid "b646dbe2-fad2-47b7-bdaa-5b7fd8a8b484", :status "Active", :type "savings", :amount 0}]})
-  
+
   
 
+
+(map :type (get @accounts user-uuid))
+
+
+
+  (map :type (get @accounts #uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"))
+  (get @accounts #uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc")
+  (map :type (get @accounts #uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"))
+  (map :amount (get @accounts #uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"))
   )
