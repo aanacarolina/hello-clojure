@@ -116,10 +116,11 @@
            (response-500 (.getMessage e))))))
 
 (defn user-accounts [request]
-  (let [user-id (get-in request [:path-params :id])
-        user-uuid (java.util.UUID/fromString user-id)
-        account-type [0 0]] 
-    {:status 200 :body (str "This user has " (count account-type) "account(s): " account-type)}))
+  (let [user-id (get-in request [:path-params :user-id])
+        user-uuid (java.util.UUID/fromString user-id)] 
+    (try {:status 200 :body (str "This user has the following accounts: " (map :type (get @accounts user-uuid)))}
+         (catch Exception e
+           (response-500 (.getMessage e))))))
 
 
 (defn user-deposits-by-account [request]
@@ -142,7 +143,7 @@
      ["/users/:id" :delete delete-user! :route-name :delete-user]
      ;accounts starts here
      ["/accounts/:user-id" :post (conj common-interceptors create-account!) :route-name :create-account]
-    #_["/users/:user-id/account" :get user-accounts :route-name :user-accounts]
+     ["/user/account/:user-id" :get user-accounts :route-name :user-accounts]
      #_["/users/:user-id/account/:account-id/type" :get user-deposits-by-account :route-name :user-deposits-by-account]}))
 
 ;======================== SERVER =====================
@@ -197,11 +198,11 @@
   (test-request :get "/hello")
   (:name (@users #uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" ))
   (java.util.UUID/fromString "11e735a5-feaa-458a-8c62-449ba5aa60dc")
- 
-(def mock-accs {#uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"
-                [{:account-uuid #uuid "c2d003cd-a14f-4546-b2e1-0c3681bf8c12", :status "Active", :type "checking", :amount 0}
-                 {:account-uuid #uuid "b646dbe2-fad2-47b7-bdaa-5b7fd8a8b484", :status "Active", :type "savings", :amount 0}]})
   
-(   map (:account-uuid #uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc") mock-accs)
+  (def mock-accs {#uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"
+                  [{:account-uuid #uuid "c2d003cd-a14f-4546-b2e1-0c3681bf8c12", :status "Active", :type "checking", :amount 0}
+                   {:account-uuid #uuid "b646dbe2-fad2-47b7-bdaa-5b7fd8a8b484", :status "Active", :type "savings", :amount 0}]})
+  
+  
 
   )
