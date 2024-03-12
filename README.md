@@ -63,7 +63,14 @@ Nice to have
 - [ ] query da poupanca os depositos de um periodo (still no deposits)
 - [ ] MGM bonus deposit of 100 when creating 
 
+### Task 4:
+- [ ] Criar testes de integração para validar o retorno e status code dos endpoints
+- [ ] Criar namespace para testes de integração
+- [ ] Criar comando no lein para rodar os testes de integração
+- [ ] Usar o io.pedestal.test
 
+
+---
 #_{:account/user-id 
  :account/id 
  :account/status
