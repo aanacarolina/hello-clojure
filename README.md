@@ -65,8 +65,9 @@ Nice to have
 
 ### Task 4:
 - [ ] Criar testes de integração para validar o retorno e status code dos endpoints
-- [ ] Criar namespace para testes de integração
+- [x] Criar namespace para testes de integração
 - [ ] Criar comando no lein para rodar os testes de integração
+https://cljdoc.org/d/leiningen/leiningen/2.11.1/api/leiningen.test
 - [ ] Usar o io.pedestal.test
 
 
