@@ -64,11 +64,10 @@ Nice to have
 - [ ] MGM bonus deposit of 100 when creating 
 
 ### Task 4:
-- [ ] Criar testes de integração para validar o retorno e status code dos endpoints
+- [+/-] Criar testes de integração para validar o retorno e status code dos endpoints
 - [x] Criar namespace para testes de integração
-- [ ] Criar comando no lein para rodar os testes de integração
-https://cljdoc.org/d/leiningen/leiningen/2.11.1/api/leiningen.test
-- [ ] Usar o io.pedestal.test
+- [x] Criar comando no lein para rodar os testes de integração
+- [x] Usar o io.pedestal.test
 
 
 ---
