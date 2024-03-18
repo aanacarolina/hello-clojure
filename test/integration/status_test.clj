@@ -5,6 +5,7 @@
    [io.pedestal.test :as test]
    [clojure.test :refer [deftest is are testing]]))
 
+;ver exemplo Thales de components
 
 (defn test-request [ verb url]
   (test/response-for (::http/service-fn @server) verb url))
