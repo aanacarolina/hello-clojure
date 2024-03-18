@@ -1,8 +1,7 @@
 (ns hello-clojure.hello
   (:require [io.pedestal.http :as http]
             [io.pedestal.http.route :as route]
-            [io.pedestal.http.body-params :as body-params]
-            [io.pedestal.test :as test]))
+            [io.pedestal.http.body-params :as body-params]))
 
 ;======================== USERS =====================
 
@@ -29,7 +28,7 @@
 ;problems: string limitations / data leak / 
 ;refactor: get-in -> destructuring (less functions to the stack)
 (defn create-user! [request]
-  (let [user-uuid (java.util.UUID/randomUUID) ;CLJ version -> entender pq nao vai sem interoperbilidade
+  (let [user-uuid (random-uuid) ;CLJ version -> entender pq nao vai sem interoperbilidade
         {{:keys [name surname age]} :json-params} request]
     (swap! users assoc user-uuid {:name name :surname surname :age age})
     {:status 201 :body (str "new user created" (last @users))}))
@@ -105,7 +104,7 @@
     (try (if-not (contains? @users user-uuid)
            response-404
            (let [created-accounts (for [{:keys [account-type deposit]} accounts-info]
-                                    {:account-uuid (java.util.UUID/randomUUID)
+                                    {:account-uuid (random-uuid)
                                      :status "Active"
                                      :type account-type
                                      :amount deposit})]
@@ -177,17 +176,6 @@
   (stop)
   (start))
 
-;======================== TESTS =====================
-
-;integration test
-(defn test-request [verb url]
-  (test/response-for (::http/service-fn @server) verb url))
-
-(defn test-request-post [verb url body headers]
-  (test/response-for (::http/service-fn @server) verb url body headers))
-
-;======================== COMMENT =====================
-
 (comment
   (start)
   (stop)
@@ -198,20 +186,14 @@
 
   ;(println (test-request :delete "/users/4c1e6f95-8875-4a90-ae06-799151834500"))
 
-  (test-request-post :post "/users" {:json-params {:name "John", :surname "Doe", :age 30}} {"Content-Type" "text/plain"})
-  (test-request :get "/hello")
+  ;(test-request-post :post "/users" {:json-params {:name "John", :surname "Doe", :age 30}} {"Content-Type" "text/plain"})
+  ;(= 200 (:status (test-request :get "/hello")))
   (:name (@users #uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc"))
   (java.util.UUID/fromString "11e735a5-feaa-458a-8c62-449ba5aa60dc")
 
   (def mock-accs {#uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"
                   [{:account-uuid #uuid "c2d003cd-a14f-4546-b2e1-0c3681bf8c12", :status "Active", :type "checking", :amount 0}
-                   {:account-uuid #uuid "b646dbe2-fad2-47b7-bdaa-5b7fd8a8b484", :status "Active", :type "savings", :amount 0}]})
-
-  
-
-
-(map :type (get @accounts user-uuid))
-
+                   {:account-uuid #uuid "b646dbe2-fad2-47b7-bdaa-5b7fd8a8b484", :status "Active", :type "savings", :amount 0}]}) 
 
 
   (map :type (get @accounts #uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc"))
