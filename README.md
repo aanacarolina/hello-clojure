@@ -70,6 +70,23 @@ Nice to have
 - [x] Usar o io.pedestal.test
 
 
+### Task 5:
+- [ ] Refatorar codigo para fazer uso de componentes
+- [x] https://github.com/thalfm/clojure-hex
+- Vamos criar o system-map no repl - Adicionar apenas db
+(def system-map
+  (component/system-map
+          :db (new-atomdatabase) ;criou o record aqui
+        ))
+; Apos a criacao do system-map iremos inicializar os componentes de fato. 
+(def components (component/start system-map))
+
+;buscar o conteudo do componente para ver se saem os usuarios cadastrados mesmo
+get-in
+
+Gerar com server primeiro e dps com db tbm.
+Controller ainda nao esta acessando os componentes. (usar main)
+
 ---
 #_{:account/user-id 
  :account/id 
