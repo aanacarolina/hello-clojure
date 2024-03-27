@@ -1,21 +1,18 @@
 (ns integration.status-test
   (:require
-   [hello-clojure.hello :refer :all]
+   [core.hello :refer :all]
    [io.pedestal.http :as http]
    [io.pedestal.test :as test]
-   [clojure.test :refer [deftest is are testing]]))
+   [core.server :as server]
+   [clojure.test :refer [deftest is testing]]))
 
 ;ver exemplo Thales de components
 
 (defn test-request [ verb url]
-  (test/response-for (::http/service-fn @server) verb url))
+  (test/response-for (::http/service-fn @server/server) verb url))
 
 (defn test-request-post [verb url body headers]
-  (test/response-for (::http/service-fn @server) verb url body headers))
-
-#_(deftest status200-test
-  (testing "Success test"
-    (is (= 200 (:status (test-request :get "/hello"))))))
+  (test/response-for (::http/service-fn @server/server) verb url body headers))
 
 (deftest success-test
   (testing "Success test"
@@ -31,17 +28,17 @@
             "Content-Security-Policy"
             "object-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:;",
             "Content-Type" "text/plain"}}
-          (do (start)
+          (do (server/start)
               (test-request  :get "/hello")))
-       (stop))))
+       (server/stop))))
 
 
 (deftest success-create-user-test
   (testing "Success test"
     (is
-     (= 201 (do (start)
+     (= 201 (do (server/start)
                 (:status (test-request-post :post
                                             "/users"
                                             {:json-params {:name "John", :surname "Doe", :age 30}}
                                             {"Content-Type" "text/plain"})
-                         (stop)))))))
+                         (server/stop)))))))

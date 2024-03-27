@@ -1,22 +1,15 @@
-(ns hello-clojure.hello
-  (:require [io.pedestal.http :as http]
-            [io.pedestal.http.route :as route]
-            [io.pedestal.http.body-params :as body-params]))
+(ns core.hello
+  (:require [core.db :as db :refer [accounts users]]
+            [core.server :as server]))
 
 ;======================== USERS =====================
 
-(def users (atom  {#uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" {:name "Chaves", :surname "S." :age 8}
-                   #uuid "e291f340-7e1b-4f78-9cd6-22afeb04eebc" {:name "Quico" :surname "S." :age 7}
-                   #uuid "4b96037f-f9a3-490f-99f3-5f9b32006edc" {:name "Chiquinha" :surname "S." :age 7}
-                   #uuid "fb3281be-11c4-4907-83d0-722df301032f" {:name "Seu Madruga" :surname "S." :age 42}
-                   #uuid "457d6d45-0d79-45c8-a743-892170ce356d" {:name "Dona Florinda" :surname "S." :age 35}}))
 
 (defn respond-hello [request]
   (let [user-name (get-in request [:query-params :name])]
     (if user-name
       {:status 200 :body (str "Hello, " user-name "\n")}
       {:status 200 :body (str "Hello, stranger\n")})))
-
 
 
 (defn all-users [request]
@@ -30,7 +23,7 @@
 (defn create-user! [request]
   (let [user-uuid (random-uuid) ;CLJ version -> entender pq nao vai sem interoperbilidade
         {{:keys [name surname age]} :json-params} request]
-    (swap! users assoc user-uuid {:name name :surname surname :age age})
+    (swap! db/users assoc user-uuid {:name name :surname surname :age age})
     {:status 201 :body (str "new user created" (last @users))}))
 
 (defn user-by-id
@@ -62,19 +55,19 @@
   (let [user-id (get-in request [:path-params :id])
         user-uuid (java.util.UUID/fromString user-id)
         {{:keys [name surname age]} :json-params} request]
-    (swap! users assoc user-uuid {:name name :surname surname :age age})
+    (swap! db/users assoc user-uuid {:name name :surname surname :age age})
     {:status 200 :body (str "user info updated" (@users user-uuid))}))
 
 (defn delete-user! [request]
   (let [user-id (get-in request [:path-params :id])
         user-uuid (java.util.UUID/fromString user-id)]
-    (swap! users dissoc user-uuid)
+    (swap! db/users dissoc user-uuid)
     {:status 204 :body (str "User id # " user-uuid ": deleted!")}))
 
 
 ;======================== ACCOUNT =====================
 
-(def accounts (atom {}))
+
 
 (defn response-create-account-200
   [user-uuid]
@@ -108,8 +101,8 @@
                                      :status "Active"
                                      :type account-type
                                      :amount deposit})]
-             (do (swap! accounts assoc user-uuid (vec created-accounts))
-                 (swap! users assoc-in [user-uuid :accounts] (vec (map :account-uuid (get @accounts user-uuid))))
+             (do (swap! db/accounts assoc user-uuid (vec created-accounts))
+                 (swap! db/users assoc-in [user-uuid :accounts] (vec (map :account-uuid (get @accounts user-uuid))))
                  (response-create-account-200  user-uuid))))
          (catch Exception e
            (response-500 (.getMessage e))))))
@@ -129,57 +122,10 @@
   {:status 200 :body "user-deposits-by-account 🏧"})
 
 
-
-;======================== ROUTES & INTERCEPTORS =====================
-
-(def common-interceptors [(body-params/body-params)])
-;duvida: criar um outro def? entity-routes e add to ::http/routes
-(def routes
-  (route/expand-routes
-   #{["/hello" :get respond-hello :route-name :hello]
-     ["/users" :get all-users :route-name :users]
-     ["/users" :post (conj common-interceptors create-user!) :route-name :create-user]
-     ["/users/:id" :get user-by-id :route-name :user-by-id]
-     ["/users/q" :get query-user :route-name :query-user-by-id]
-     ["/users/:id" :put (conj common-interceptors update-user!) :route-name :update-user]
-     ["/users/:id" :delete delete-user! :route-name :delete-user]
-     ;accounts starts here
-     ["/accounts/:user-id" :post (conj common-interceptors create-account!) :route-name :create-account]
-     ["/user/account/:user-id" :get user-accounts :route-name :user-accounts]
-     ;need to make deposit to have a history - to display the amount just change route above with :amount instead of :type 
-     #_["/users/:user-id/account/:account-id/type" :get user-deposits-by-account :route-name :user-deposits-by-account]}))
-
-;======================== SERVER =====================
-
-(defn create-server []
-  (http/create-server
-   {::http/routes routes
-    ::http/type :jetty
-    ::http/port 7171
-    ::http/join? false}))
-
-(defonce server (atom nil))
-
-(defn start []
-  (try
-    (reset! server (http/start (create-server)))
-    (catch Exception e
-      e)))
-
-(defn stop []
-  (try
-    (http/stop @server)
-    (catch Exception e
-      e)))
-
-(defn reset-server []
-  (stop)
-  (start))
-
 (comment
-  (start)
-  (stop)
-  (reset-server)
+  (server/start)
+  (server/stop)
+  (server/reset-server)
 
   @users
   @accounts
