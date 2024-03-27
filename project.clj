@@ -10,7 +10,8 @@
                  [ch.qos.logback/logback-classic "1.2.10" :exclusions [org.slf4j/slf4j-api]]
                  [org.slf4j/jul-to-slf4j "1.7.35"]
                  [org.slf4j/jcl-over-slf4j "1.7.35"]
-                 [org.slf4j/log4j-over-slf4j "1.7.35"]]
+                 [org.slf4j/log4j-over-slf4j "1.7.35"]
+                 [com.stuartsierra/component "1.1.0"]]
   :min-lein-version "2.0.0"
   :resource-paths ["config", "resources"] 
   :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "hello-clojure.server/run-dev"]}
