@@ -1,15 +1,22 @@
 (ns core.components
-  (:require [com.stuartsierra.component :as component]))
+  (:require [com.stuartsierra.component :as component]
+            [components.db :as db]
+            [components.routes :as routes]
+            [components.server :as server]))
 
 ;vai agir como main por enquanto no meu projeto
 ;system map e start aqui
 
 (defn hello-system-map []
-  (component/system-map 
-   :database (database/new-database)
+  (component/system-map
+   :database (db/new-atomdatabase)
    :routes (routes/new-routes)
-   :webapp (component/using (webapp/new-webapp) [:config :database :routes])
-   :pedestal (component/using (component.pedestal/new-pedestal) [:config :database :routes :webapp])))
+   :server (component/using (server/new-server) [:database :routes])))
 
 
-(defn main [] (component/start (hello-system-map)))
+(def ready-steady-go (component/start (hello-system-map))) 
+;info for THIS vai estar vindo daqui
+ (println ready-steady-go)
+
+#_(def ready-steady-stop (component/stop (hello-system-map))) 
+
