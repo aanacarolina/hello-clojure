@@ -1,10 +1,12 @@
 (ns integration.status-test
   (:require
-   [core.hello :refer :all]
    [io.pedestal.http :as http]
-   [io.pedestal.test :as test]
-   [core.server :as server]
-   [clojure.test :refer [deftest is testing]]))
+   [io.pedestal.test :as test] 
+   [clojure.test :refer [deftest is testing]]
+   [com.stuartsierra.component :as component]
+   [components.db :as db]
+   [components.routes :as routes]
+   [components.server :as server]))
 
 ;ver exemplo Thales de components
 
@@ -27,18 +29,15 @@
             "X-Permitted-Cross-Domain-Policies" "none",
             "Content-Security-Policy"
             "object-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:;",
-            "Content-Type" "text/plain"}}
-          (do (server/start)
-              (test-request  :get "/hello")))
-       (server/stop))))
+            "Content-Type" "text/plain"}} 
+          (test-request  :get "/hello")))))
 
 
 (deftest success-create-user-test
   (testing "Success test"
     (is
-     (= 201 (do (server/start)
-                (:status (test-request-post :post
-                                            "/users"
-                                            {:json-params {:name "John", :surname "Doe", :age 30}}
-                                            {"Content-Type" "text/plain"})
-                         (server/stop)))))))
+     (= 201
+        (:status (test-request-post :post
+                                    "/users"
+                                    {:json-params {:name "John", :surname "Doe", :age 30}}
+                                    {"Content-Type" "text/plain"}))))))
