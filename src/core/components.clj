@@ -14,9 +14,10 @@
    :server (component/using (server/new-server) [:database :routes])))
 
 
-(def ready-steady-go (component/start (hello-system-map))) 
+(defn ready-steady-go []
+  (component/start (hello-system-map))) 
 ;info for THIS vai estar vindo daqui
- (println ready-steady-go)
+ (println (:database ready-steady-go))
 
 #_(def ready-steady-stop (component/stop (hello-system-map))) 
 

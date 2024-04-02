@@ -19,6 +19,13 @@
     (println "🛑🛢️ Stopping Atom-DB")
     (assoc this :atom-database nil)))
 
+;factory method - cria instancias
 (defn new-atomdatabase []
   (->AtomDatabase))
+
+;-> ==  .  == new - criando uma nova instancia do Record
+
+;opcional, mas é util pois podemos ter varias maneiras de criar um record de DB.
+;alem de ser melhor para criar um unico ponto para o record - que centralizar o comportamento.
+
 
