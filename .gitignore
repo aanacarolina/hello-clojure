@@ -16,6 +16,7 @@ target/
 repl-port
 .nrepl-port
 .repl
+"**/.calva/repl.calva-repl"
 
 # Temp Files
 *.orig
