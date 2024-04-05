@@ -31,7 +31,7 @@
       e)))
 
 ;ADD INTERCEPTOR DEFAULT
-;pegar o contexto (request esta dentro do contexto, mas o db NAO, entao iremos coloca-lo no contexto)
+;pegar do contexto (request esta dentro do contexto, mas o db NAO, entao iremos coloca-lo no contexto)
 ;fazer o mesmo para os outros components
 
 (defrecord Server [database routes]

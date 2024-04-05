@@ -16,7 +16,8 @@
 
 (defn ready-steady-go []
   (component/start (hello-system-map))) 
-;info for THIS vai estar vindo daqui
+;info for THIS vai estar vindo daqui, que foi adicionada pela funcao acima system-map, ai aqui foi de fato statarda
+
  (println (:database ready-steady-go))
 
 #_(def ready-steady-stop (component/stop (hello-system-map))) 
