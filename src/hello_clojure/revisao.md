@@ -18,7 +18,8 @@ Uma string contendo todas as informacoes necessarias para comunicar com servidor
 Ambas para  REQ(client) e RES(server)
 Cache pode estar nesse nivel tbm, mas não no REST.  
 
-https://www.oreilly.com/library/view/head-first-servlets/9780596516680/ch01s13.html
+[Anatomy of an HTTP GET request](https://www.oreilly.com/library/view/head-first-servlets/9780596516680/ch01s13.html)
+[Modelo OSI - Open Systems Interconnection](https://community.cisco.com/t5/image/serverpage/image-id/180291iDA59C8DFF9920CD8?v=v2)
 
 - HTTP Status 
 Padronizacao de respostas do servidor
