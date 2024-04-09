@@ -1,17 +1,26 @@
 (ns components.server
   (:require [com.stuartsierra.component :as component]
+            [io.pedestal.interceptor :as interceptor]
+            [components.db :as db]
             [io.pedestal.http :as http]))
 
 (defonce server (atom nil))
 
-(defn- create-server [routes]
+(defn db-interceptor [db]
+  (interceptor/interceptor {:name  :db-interceptor
+                            :enter (fn [context]
+                                     (assoc-in context [:request :db] db))}))
+
+;aqui estamos criando nosso service map 
+;se eu nao usar o UPDATE no ::http/interceptors eu irei sobrescrever todos os outros interceptors 
+(defn- create-server [database routes]
   (http/create-server
-   {::http/routes (:endpoints routes)
-    ::http/type :jetty
-    ::http/port 7171
-    ::http/join? false
-    ;::http/interceptors ADD 
-    }))
+   (-> {::http/routes (:endpoints routes)
+        ::http/type :jetty
+        ::http/port 7171
+        ::http/join? false}
+       http/default-interceptors
+       (update ::http/interceptors conj (db-interceptor database)))))
 
 (defn- stop []
   (try
@@ -24,9 +33,9 @@
 ;defn- private == 
 ;private functions help with isolating
 
-(defn- start [routes]
+(defn- start [routes database]
   (try
-    (reset! server (http/start (create-server routes)))
+    (reset! server (http/start (create-server database routes)))
     (catch Exception e
       e)))
 
@@ -37,9 +46,9 @@
 (defrecord Server [database routes]
   component/Lifecycle
   (start [this]
-         (println "🚀 Starting Server")
-         (start routes)
-         (assoc this :server nil))
+    (println "🚀 Starting Server")
+    (start database routes)
+    (assoc this :server nil))
 
   (stop [this]
     (println "🛑🚀 Stopping Server")
