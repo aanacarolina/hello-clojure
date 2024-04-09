@@ -33,7 +33,7 @@
 ;defn- private == 
 ;private functions help with isolating
 
-(defn- start [routes database]
+(defn- start [database routes]
   (try
     (reset! server (http/start (create-server database routes)))
     (catch Exception e
