@@ -17,6 +17,7 @@ repl-port
 .nrepl-port
 .repl
 "**/.calva/repl.calva-repl"
+.idea
 
 # Temp Files
 *.orig
