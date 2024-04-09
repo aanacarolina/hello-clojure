@@ -71,7 +71,7 @@ Nice to have
 
 
 ### Task 5:
-- [ ] Refatorar codigo para fazer uso de componentes
+- [x] Refatorar codigo para fazer uso de componentes
 - [x] https://github.com/thalfm/clojure-hex
 - Vamos criar o system-map no repl - Adicionar apenas db
 (def system-map
