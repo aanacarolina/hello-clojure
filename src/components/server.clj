@@ -9,7 +9,7 @@
 (defn db-interceptor [db]
   (interceptor/interceptor {:name  :db-interceptor
                             :enter (fn [context]
-                                     (assoc-in context [:request :db] db))}))
+                                     (update context :request assoc-in [:components :db] db))}))
 
 ;aqui estamos criando nosso service map 
 ;se eu nao usar o UPDATE no ::http/interceptors eu irei sobrescrever todos os outros interceptors 
