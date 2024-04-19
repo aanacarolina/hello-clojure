@@ -115,7 +115,7 @@ Controller ainda nao esta acessando os componentes. (usar main)
 
 
 ### Task 6:
-- [] Use schemas 
+- [x] Use schemas 
 - [x] Use diplomat arch 
 - [ ] Criar interceptor do server 
 printar a request de POST , para ver a estrutura
