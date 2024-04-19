@@ -11,7 +11,8 @@
                  [org.slf4j/jul-to-slf4j "1.7.35"]
                  [org.slf4j/jcl-over-slf4j "1.7.35"]
                  [org.slf4j/log4j-over-slf4j "1.7.35"]
-                 [com.stuartsierra/component "1.1.0"]]
+                 [com.stuartsierra/component "1.1.0"]
+                 [prismatic/schema "1.4.1"]]
   :min-lein-version "2.0.0"
   :resource-paths ["config", "resources"] 
   :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "hello-clojure.server/run-dev"]}
