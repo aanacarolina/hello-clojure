@@ -1,4 +1,4 @@
-(ns core.components
+(ns components
   (:require [com.stuartsierra.component :as component]
             [components.db :as db]
             [components.routes :as routes]
@@ -16,6 +16,8 @@
 
 (defn ready-steady-go []
   (component/start (hello-system-map))) 
+  
+
 ;info for THIS vai estar vindo daqui, que foi adicionada pela funcao acima system-map, ai aqui foi de fato statarda
 
  (println (:database ready-steady-go))

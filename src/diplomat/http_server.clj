@@ -1,5 +1,5 @@
 
-(ns core.http-server
+(ns diplomat.http-server
   (:require
    [io.pedestal.http.body-params :as body-params]))
 
@@ -18,8 +18,10 @@
 (defn create-user! [request] 
   (let [user-uuid (random-uuid)
         {{:keys [name surname age]} :json-params} request]
-    (swap! (:atom-database request) assoc user-uuid {:name name :surname surname :age age})
-    {:status 201 :body (str "new user created" (last @(get-in request [:components :db :atom-database])))}))
+       (swap! (get-in request [:components :db :atom-database]) assoc user-uuid {:name name :surname surname :age age})
+    {:status 201 :body (str "new user created" (last @(get-in request [:components :db :atom-database])))}
+    (println "✅✅✅✅✅✅✅✅✅✅✅✅" request "✅✅✅✅✅✅✅✅✅✅✅✅")))
+
 
 (defn user-by-id
   [request]

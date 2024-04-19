@@ -1,5 +1,15 @@
 # hello-clojure
 
+## Getting Started
+
+1. Start the REPL
+2. Load and evaluate the `components.clj` file
+3. Start the server - execute `ready-steady-go` function
+4. Go to [http://localhost:7171/hello?name=YourNameHere](http://localhost:7171/hello?name=Carol) to see: `Hello, {name}!`
+
+Alternatively you can run the test-request functions provided.
+
+
 ### Task 1:
 - Create a Clojure WebApp
 - Create a server
@@ -103,12 +113,19 @@ Controller ainda nao esta acessando os componentes. (usar main)
  :user/accounts [ ]
 }
 
-## Getting Started
 
-1. Start the REPL
-2. Load and evaluate the `hello.clj` file
-3. Start the server - run `start` function
-4. Go to [http://localhost:7171/hello?name=YourNameHere](http://localhost:7171/hello?name=Carol) to see: `Hello, {name}!`
+### Task 6:
+- [] Use schemas 
+- [x] Use diplomat arch 
+- [ ] Criar interceptor do server 
+printar a request de POST , para ver a estrutura
+vamos usar o :json-params e ai usamos essa parte para o schema do user (model/user) no wire-in
+- [ ] Criar wire-in
+mapear o que vem da minha request
+GET nao faz parte
+- [ ]
+Minha pasta components aqui é como se fossem as libs do nubank 
 
-Alternatively you can run the test-request functions provided.
+
+
 

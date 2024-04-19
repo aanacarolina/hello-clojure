@@ -1,7 +1,7 @@
 (ns components.routes
   (:require [com.stuartsierra.component :as component]
             [io.pedestal.http.route :as route]
-            [core.http-server :as endpoints]))
+            [diplomat.http-server :as endpoints]))
 
 ;
 

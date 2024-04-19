@@ -29,3 +29,18 @@
 ;alem de ser melhor para criar um unico ponto para o record - que centralizar o comportamento.
 
 
+(comment 
+  (defn delivery-date-by-source 
+           [number]
+           (when (> number 5)
+             (cond
+               (= number 6) (println "[:card/delivery-problem :sent-at]")
+               (= number 7) (println "[:card/card-tracking :delivery-problem-solution :sent-at]")
+               :else  (println ":issued-at"))))
+  
+  (delivery-date-by-source 1)
+  (delivery-date-by-source 6)
+  (delivery-date-by-source 7)
+  (delivery-date-by-source 10)
+
+  )

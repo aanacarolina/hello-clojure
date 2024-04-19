@@ -6,7 +6,7 @@
 
 (defonce server (atom nil))
 
-(defn db-interceptor [db]
+(defn- db-interceptor [db]
   (interceptor/interceptor {:name  :db-interceptor
                             :enter (fn [context]
                                      (update context :request assoc-in [:components :db] db))}))
