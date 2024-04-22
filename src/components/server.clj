@@ -2,7 +2,8 @@
   (:require [com.stuartsierra.component :as component]
             [io.pedestal.interceptor :as interceptor]
             [components.db :as db]
-            [io.pedestal.http :as http]))
+            [io.pedestal.http :as http]
+            [clojure.data.json :as json]))
 
 (defonce server (atom nil))
 
@@ -10,6 +11,16 @@
   (interceptor/interceptor {:name  :db-interceptor
                             :enter (fn [context]
                                      (update context :request assoc-in [:components :db] db))}))
+(defn- parse-json
+  [response]
+  (-> response
+      (update :body json/write-str)
+      (assoc-in [:headers "Content-Type"] "Application/json")))
+
+(defn- res->json []
+  (let [response-json {:name  ::response-json
+                       :leave #(update-in % [:response] parse-json)}]
+    (interceptor/interceptor response-json)))
 
 ;aqui estamos criando nosso service map 
 ;se eu nao usar o UPDATE no ::http/interceptors eu irei sobrescrever todos os outros interceptors 
@@ -20,7 +31,8 @@
         ::http/port 7171
         ::http/join? false}
        http/default-interceptors
-       (update ::http/interceptors conj (db-interceptor database)))))
+       (update ::http/interceptors conj (db-interceptor database))
+       (update ::http/interceptors conj (res->json)))))
 
 (defn- stop []
   (try

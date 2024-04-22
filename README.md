@@ -117,7 +117,7 @@ Controller ainda nao esta acessando os componentes. (usar main)
 ### Task 6:
 - [x] Use schemas 
 - [x] Use diplomat arch 
-- [ ] Criar interceptor do server 
+- [x] Criar interceptor do server 
 printar a request de POST , para ver a estrutura
 vamos usar o :json-params e ai usamos essa parte para o schema do user (model/user) no wire-in
 - [ ] Criar wire-in
