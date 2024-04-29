@@ -115,17 +115,26 @@ Controller ainda nao esta acessando os componentes. (usar main)
 
 
 ### Task 6:
-- [x] Use schemas 
 - [x] Use diplomat arch 
+- [x] Use schemas 
 - [x] Criar interceptor do server 
 printar a request de POST , para ver a estrutura
 vamos usar o :json-params e ai usamos essa parte para o schema do user (model/user) no wire-in
-- [ ] Criar wire-in
+- [ ] Criar wire-in (entender dados da request -  o que enviamos do postman - json (DS) MAS...)
+schema req - relativo a chave
+valor é o que tipamos (schema prismatic)
 mapear o que vem da minha request
 GET nao faz parte
 - [ ]
 Minha pasta components aqui é como se fossem as libs do nubank 
 
 
+Adapter
+Adaptar para nosso "codigo"
+adapta para uma model
+
+
+Model
+schema
 
 

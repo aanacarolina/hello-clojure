@@ -21,6 +21,9 @@ Cache pode estar nesse nivel tbm, mas não no REST.
 [Anatomy of an HTTP GET request](https://www.oreilly.com/library/view/head-first-servlets/9780596516680/ch01s13.html)
 [Modelo OSI - Open Systems Interconnection](https://community.cisco.com/t5/image/serverpage/image-id/180291iDA59C8DFF9920CD8?v=v2)
 
+- URL x URI
+TODO
+
 - HTTP Status 
 Padronizacao de respostas do servidor
 
@@ -33,5 +36,11 @@ Mais usados
 301 - DNS ou HOST NAME change (faz redirect automaticamente)
 
 - O que é uma API?
+Application 
+
+- O que é um interceptor?
+Levar ao pé da letra. Intercepta algo. Um pilha (antes ou depois). 
+
+No caso do pedestal estamos tratando de aplicações web, logo intercepta req e res.
 
 
