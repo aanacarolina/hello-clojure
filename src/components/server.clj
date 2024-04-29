@@ -32,7 +32,7 @@
         ::http/join? false}
        http/default-interceptors
        (update ::http/interceptors conj (db-interceptor database))
-       (update ::http/interceptors conj (res->json)))))
+       #_(update ::http/interceptors conj (res->json)))))
 
 (defn- stop []
   (try

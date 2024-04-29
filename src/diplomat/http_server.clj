@@ -19,8 +19,7 @@
   (let [user-uuid (random-uuid)
         {{:keys [name surname age]} :json-params} request]
        (swap! (get-in request [:components :db :atom-database]) assoc user-uuid {:name name :surname surname :age age})
-    {:status 201 :body (str "new user created" (last @(get-in request [:components :db :atom-database])))}
-    (println "✅✅✅✅✅✅✅✅✅✅✅✅" request "✅✅✅✅✅✅✅✅✅✅✅✅")))
+    {:status 201 :body (last @(get-in request [:components :db :atom-database]))}))
 
 
 (defn user-by-id
