@@ -36,11 +36,28 @@ Mais usados
 301 - DNS ou HOST NAME change (faz redirect automaticamente)
 
 - O que é uma API?
-Application 
+Application Programming Interface 
 
 - O que é um interceptor?
 Levar ao pé da letra. Intercepta algo. Um pilha (antes ou depois). 
 
 No caso do pedestal estamos tratando de aplicações web, logo intercepta req e res.
+
+- Arquitetura Hexagonal
+ 
+ ![Arquitetura Hexagonal](hexarch.png)
+
+- Ports 
+implementam comunicacao com mundo externo (http)
+ex: components 
+
+- Adapters
+Fazem o Wire dos ports para os controllers.
+accessan todos os compnentes e dependencia explicita
+
+
+Controllers
+Executam a logic
+nao devem estar acopladas
 
 

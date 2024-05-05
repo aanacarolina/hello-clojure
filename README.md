@@ -93,6 +93,7 @@ Nice to have
 
 ;buscar o conteudo do componente para ver se saem os usuarios cadastrados mesmo
 get-in
+Minha pasta components aqui é como se fossem as libs do nubank 
 
 Gerar com server primeiro e dps com db tbm.
 Controller ainda nao esta acessando os componentes. (usar main)
@@ -121,12 +122,11 @@ Controller ainda nao esta acessando os componentes. (usar main)
 printar a request de POST , para ver a estrutura
 vamos usar o :json-params e ai usamos essa parte para o schema do user (model/user) no wire-in
 - [ ] Criar wire-in (entender dados da request -  o que enviamos do postman - json (DS) MAS...)
-schema req - relativo a chave
-valor é o que tipamos (schema prismatic)
+schema req - relativo a chave (model)
+valor é o que tipamos (schema prismatic - wire)
 mapear o que vem da minha request
 GET nao faz parte
 - [ ]
-Minha pasta components aqui é como se fossem as libs do nubank 
 
 
 Adapter
