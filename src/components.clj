@@ -13,10 +13,14 @@
    :routes (routes/new-routes)
    :server (component/using (server/new-server) [:database :routes])))
 
+;TODO: restart server aqui, na vdd - verificar se server ja existe por conta da porta
 
 (defn ready-steady-go []
   (component/start (hello-system-map))) 
   
+(components.server/restart 
+ (:database (db/new-atomdatabase)) (:routes (routes/new-routes)))
+
 
 ;info for THIS vai estar vindo daqui, que foi adicionada pela funcao acima system-map, ai aqui foi de fato statarda
 
