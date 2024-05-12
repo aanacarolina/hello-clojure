@@ -46,6 +46,7 @@ No caso do pedestal estamos tratando de aplicações web, logo intercepta req e 
 - Arquitetura Hexagonal
  
  ![Arquitetura Hexagonal](hexarch.png)
+ Video: [Complex Made Bearable -  Diplomat Architecture](https://www.youtube.com/watch?v=ct5aWqhHARs)
 
 - Ports 
 implementam comunicacao com mundo externo (http)
@@ -57,7 +58,7 @@ accessan todos os compnentes e dependencia explicita
 
 
 Controllers
-Executam a logic
+Executam as logics 
 nao devem estar acopladas
 
 
