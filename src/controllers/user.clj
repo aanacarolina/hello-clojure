@@ -31,10 +31,11 @@
         user-uuid (java.util.UUID/fromString user-id)
         user-not-found {:status  404
                         :headers {"Content-Type" "text/plain"}
-                        :body    "User not found"}]
+                        :body    "Nao achei, gente!"}]
     (if (not (contains? @(get-in request [:components :db :atom-database]) user-uuid))
       user-not-found
-      {:status 200 :body (@(get-in request [:components :db :atom-database]) user-uuid)})))
+      {:status 200 
+       :body (@(get-in request [:components :db :atom-database]) user-uuid)})))
 
 ;static methods belong to the class not to the object
 (defn query-user
@@ -53,9 +54,12 @@
   [request]
   (let [user-id (get-in request [:path-params :id])
         user-uuid (java.util.UUID/fromString user-id)
-        {{:keys [name surname age]} :json-params} request]
-    (swap! (:atom-database request) assoc user-uuid {:name name :surname surname :age age})
-    {:status 200 :body (str "user info updated" (@(get-in request [:components :db :atom-database]) user-uuid))}))
+        {{:keys [name surname age] :as data} :json-params} request]
+    (try (s/validate w.in.user/UserRequest data)
+      (swap! (get-in request [:components :db :atom-database]) assoc user-uuid {:name name :surname surname :age age})
+      {:status 200 :body (@(get-in request [:components :db :atom-database]) user-uuid)}
+      (catch ExceptionInfo e
+        {:status 400 :body (.getMessage e)}))))
 
 (defn delete-user! [request]
   (let [user-id (get-in request [:path-params :id])
