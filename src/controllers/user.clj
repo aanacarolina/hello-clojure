@@ -1,6 +1,7 @@
 (ns controllers.user 
   (:require [wire.in.user :as w.in.user]
-            [schema.core :as s]))
+            [schema.core :as s])
+  (:import (clojure.lang ExceptionInfo)))
 
 ;======================== USERS =====================
 
@@ -16,12 +17,12 @@
 
 (defn create-user! [request] 
   (let [user-uuid (random-uuid)
-        {{:keys [name surname age]} :json-params} request]
-    (try (s/validate w.in.user/UserRequest name surname age)
+        {{:keys [name surname age] :as data} :json-params} request]
+    (try (s/validate w.in.user/UserRequest data)
          (swap! (get-in request [:components :db :atom-database]) assoc user-uuid {:name name :surname surname :age age})
          {:status 201 :body (last @(get-in request [:components :db :atom-database]))}
-         (catch Exception e
-           {:status 201 :body e}))))
+         (catch ExceptionInfo e 
+           {:status 400 :body (.getMessage e)}))))
 
 
 (defn user-by-id
