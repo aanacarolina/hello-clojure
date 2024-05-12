@@ -128,13 +128,3 @@ mapear o que vem da minha request
 GET nao faz parte
 
 
-
-Adapter
-Adaptar para nosso "codigo"
-adapta para uma model
-
-
-Model
-schema
-
-

@@ -21,6 +21,10 @@ Cache pode estar nesse nivel tbm, mas não no REST.
 [Anatomy of an HTTP GET request](https://www.oreilly.com/library/view/head-first-servlets/9780596516680/ch01s13.html)
 [Modelo OSI - Open Systems Interconnection](https://community.cisco.com/t5/image/serverpage/image-id/180291iDA59C8DFF9920CD8?v=v2)
 
+- REPL
+Lein
+Calva/Cursive
+
 - URL x URI
 TODO
 

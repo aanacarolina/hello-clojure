@@ -15,13 +15,13 @@
 (s/validate UserRequest
             {:name "aaa"
              :surname "bbbb"
-             :age "1"})
+             :age 1})
 
 ;nao gera exception apenas mostra que nao é igual, no caso.
 (s/check UserRequest
          {:name "aaa"
           :surname "bbbb"
-          :age "1"})
+          :age 1})
 
 ;Printa o schema definido 
 (s/explain UserRequest)

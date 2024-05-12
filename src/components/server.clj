@@ -39,6 +39,7 @@
     (http/stop @server)
     (catch Exception e
       e)))
+
 ;tratar erro = try/catch captura, mas nao handles 
 ;pega a Excepetion mais alta na hierarquia na arvore das excessoes (runtime exception, etc)
 
@@ -51,6 +52,11 @@
     (catch Exception e
       e)))
 
+;criar restart
+(defn restart [database routes]
+  (stop)
+  (start database routes))
+
 ;ADD INTERCEPTOR DEFAULT
 ;pegar do contexto (request esta dentro do contexto, mas o db NAO, entao iremos coloca-lo no contexto)
 ;fazer o mesmo para os outros components
@@ -58,9 +64,11 @@
 (defrecord Server [database routes]
   component/Lifecycle
   (start [this]
-    (println "🚀 Starting Server")
-    (start database routes)
-    (assoc this :server nil))
+         (println "🚀 Starting Server")
+         (when @server
+           (stop))
+         (start database routes)
+         (assoc this :server server))
 
   (stop [this]
     (println "🛑🚀 Stopping Server")
