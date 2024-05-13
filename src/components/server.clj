@@ -1,6 +1,7 @@
 (ns components.server
   (:require [com.stuartsierra.component :as component]
             [io.pedestal.interceptor :as interceptor]
+            [io.pedestal.interceptor.error :as i.error]
             [components.db :as db]
             [io.pedestal.http :as http]
             #_[clojure.data.json :as json]))
@@ -18,6 +19,13 @@
                        :leave #(update-in % [:response] http/json-response)}]
     (interceptor/interceptor response-json)))
 
+(def service-error-handler
+  (i.error/error-dispatch [ctx ex]
+                          [{:exception-type :clojure.lang.ExceptionInfo}]
+                          (assoc ctx :response {:status 400 :body "Wrong params"})
+                          :else
+                          (assoc ctx :response {:status 500 :body ex})))
+
 ;aqui estamos criando nosso service map 
 ;se eu nao usar o UPDATE no ::http/interceptors eu irei sobrescrever todos os outros interceptors 
 (defn- create-server [database routes]
@@ -28,6 +36,7 @@
         ::http/join? false}
        http/default-interceptors
        (update ::http/interceptors conj (db-interceptor database))
+       (update ::http/interceptors conj service-error-handler)
        #_(update ::http/interceptors conj (res->json)))))
 
 (defn- stop []

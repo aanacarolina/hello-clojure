@@ -9,11 +9,10 @@
 ;refatorar 
 (defn create-user! 
   [{:keys [json-params components]}]
-  (try (s/validate w.in.user/UserRequest json-params)
-       (let [response (-> json-params
-                          adapters.user/wire-in->internal
-                          (controllers.user/create-user! (get-in components [:db :atom-database])))]
-         {:status 201 :body response})
-       (catch ExceptionInfo e
-         {:status 400 :body (.getMessage e)})))
+  (s/validate w.in.user/UserRequest json-params)
+  (let [response (-> json-params
+                     adapters.user/wire-in->internal
+                     (controllers.user/create-user! (get-in components [:db :atom-database]))
+                     adapters.user/internal->wire-out)]
+    {:status 201 :body response}))
 
