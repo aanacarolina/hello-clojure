@@ -12,8 +12,7 @@
   (try (s/validate w.in.user/UserRequest json-params)
        (let [response (-> json-params
                           adapters.user/wire-in->internal
-                          (controllers.user/create-user! (get-in components [:db :atom-database]))
-                          last)]
+                          (controllers.user/create-user! (get-in components [:db :atom-database])))]
          {:status 201 :body response})
        (catch ExceptionInfo e
          {:status 400 :body (.getMessage e)})))

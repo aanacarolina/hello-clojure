@@ -4,7 +4,8 @@
 
 ;entity 
 (s/defschema User
-  {:user/name s/Str
+  {:user/id s/Uuid
+   :user/name s/Str
    :user/surname s/Str
    :user/age s/Int})
 

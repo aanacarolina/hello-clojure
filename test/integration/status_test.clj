@@ -9,7 +9,7 @@
    [components.server :as server]))
 
 ;ver exemplo Thales de components
-
+;TODO refactor tests
 (defn test-request [ verb url]
   (test/response-for (::http/service-fn @server/server) verb url))
 

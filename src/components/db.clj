@@ -8,8 +8,8 @@
   ;this é um mapa dos componentes que temos temos do system 
   (start [this]
     (println "🛢️ Starting Atom-DB")
-    (assoc this :atom-database
-           (atom {#uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" {:name "Chaves", :surname "S." :age 8 
+    (assoc this :atom-database (atom [])
+           #_(atom {#uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" {:name "Chaves", :surname "S." :age 8 
                                                                 :accounts [
                                                                            {:account-uuid #uuid "f061f807-fd80-4536-9242-7d084a6c2b81", :status "Active", :type "checking", :amount 0} 
                                                                            {:account-uuid #uuid "0f17da9d-9a0c-4332-9b7f-9a7f965f0299", :status "Active", :type "savings", :amount 0}]}

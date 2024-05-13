@@ -1,7 +1,9 @@
 (ns controllers.user 
   (:require [wire.in.user :as w.in.user]
             [schema.core :as s]
-            [models.user])
+            [models.user]
+            [logic.user]
+            [db.user])
   (:import (clojure.lang ExceptionInfo)))
 
 ;======================== USERS =====================
@@ -16,13 +18,13 @@
   {:status 200
    :body (str "List of all users: " @(get-in request [:components :db :atom-database]))})
 
-
+;so chama logic e banco de dados
 (s/defn create-user! 
   [user :- models.user/User 
    db :- s/atom]
-  (let [user-uuid (random-uuid)]
-    (swap! db assoc user-uuid user)))
-
+  (let [new-user (logic.user/new-user (random-uuid) user)
+        user-created (db.user/create-user! new-user db)]
+    user-created))
 
 (defn user-by-id
   [request]
