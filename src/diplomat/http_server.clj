@@ -2,7 +2,8 @@
 (ns diplomat.http-server
   (:require
    [io.pedestal.http.body-params :as body-params]
-   [controllers.user :as user]))
+   [controllers.user :as user]
+   [diplomat.http-in.user :as d.http-in.user]))
 
 (def common-interceptors [(body-params/body-params)])
 
@@ -16,7 +17,7 @@
                  
                  ["/users" 
                   :post (conj common-interceptors 
-                              user/create-user!) 
+                              d.http-in.user/create-user!) 
                   :route-name :create-user]
                  
                  ["/users/:id" 

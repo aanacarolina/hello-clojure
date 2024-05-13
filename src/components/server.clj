@@ -3,7 +3,7 @@
             [io.pedestal.interceptor :as interceptor]
             [components.db :as db]
             [io.pedestal.http :as http]
-            [clojure.data.json :as json]))
+            #_[clojure.data.json :as json]))
 
 (defonce server (atom nil))
 
@@ -11,15 +11,11 @@
   (interceptor/interceptor {:name  :db-interceptor
                             :enter (fn [context]
                                      (update context :request assoc-in [:components :db] db))}))
-(defn- parse-json
-  [response]
-  (-> response
-      (update :body json/write-str)
-      (assoc-in [:headers "Content-Type"] "Application/json")))
+
 
 (defn- res->json []
   (let [response-json {:name  ::response-json
-                       :leave #(update-in % [:response] parse-json)}]
+                       :leave #(update-in % [:response] http/json-response)}]
     (interceptor/interceptor response-json)))
 
 ;aqui estamos criando nosso service map 
@@ -64,11 +60,11 @@
 (defrecord Server [database routes]
   component/Lifecycle
   (start [this]
-         (println "🚀 Starting Server")
-         (when @server
-           (stop))
-         (start database routes)
-         (assoc this :server server))
+    (println "🚀 Starting Server")
+    (when @server
+      (stop))
+    (start database routes)
+    (assoc this :server server))
 
   (stop [this]
     (println "🛑🚀 Stopping Server")
