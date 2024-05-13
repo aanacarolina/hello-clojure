@@ -128,3 +128,8 @@ mapear o que vem da minha request
 GET nao faz parte
 
 
+### Task 7:
+- [ ] Refatorar tudo para utilizar a arquitetura atual
+- [ ] Apontar pros e contras da atual arquitetura que estamos usando agora em comparação à anterior
+- [ ] Refatorar testes de integração 
+- [ ] Criar testes unitarios (logic and adapters)

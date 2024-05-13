@@ -8,8 +8,7 @@
 ;http-in chama uma controller e obtem uma resposta com status code 
 ;refatorar 
 (defn create-user! 
-  [{:keys [json-params components]}]
-  (s/validate w.in.user/UserRequest json-params)
+  [{:keys [json-params components]}] 
   (let [response (-> json-params
                      adapters.user/wire-in->internal
                      (controllers.user/create-user! (get-in components [:db :atom-database]))

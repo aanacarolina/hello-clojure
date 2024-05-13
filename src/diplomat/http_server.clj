@@ -3,7 +3,9 @@
   (:require
    [io.pedestal.http.body-params :as body-params]
    [controllers.user :as user]
-   [diplomat.http-in.user :as d.http-in.user]))
+   [diplomat.http-in.user :as d.http-in.user]
+   [components.server :as c.server]
+   [wire.in.user :as w.in.user]))
 
 (def common-interceptors [(body-params/body-params)])
 
@@ -17,6 +19,7 @@
                  
                  ["/users" 
                   :post (conj common-interceptors 
+                              (c.server/coerce! w.in.user/UserRequest)
                               d.http-in.user/create-user!) 
                   :route-name :create-user]
                  

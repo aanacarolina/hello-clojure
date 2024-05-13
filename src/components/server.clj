@@ -4,7 +4,7 @@
             [io.pedestal.interceptor.error :as i.error]
             [components.db :as db]
             [io.pedestal.http :as http]
-            #_[clojure.data.json :as json]))
+            [schema.core :as s]))
 
 (defonce server (atom nil))
 
@@ -25,6 +25,18 @@
                           (assoc ctx :response {:status 400 :body "Wrong params"})
                           :else
                           (assoc ctx :response {:status 500 :body ex})))
+
+
+(defn coerce! [schema]
+   (interceptor/interceptor {:name  :coerce-interceptor
+                            :enter (fn [context]
+                                     (let [json-params (get-in context [:request :json-params])]
+                                      (s/validate schema json-params)
+                                       context))}))
+
+;todo EXTERNALIZE 
+;:response :body
+
 
 ;aqui estamos criando nosso service map 
 ;se eu nao usar o UPDATE no ::http/interceptors eu irei sobrescrever todos os outros interceptors 
