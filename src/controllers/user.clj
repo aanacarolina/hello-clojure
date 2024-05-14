@@ -6,6 +6,19 @@
             [db.user])
   (:import (clojure.lang ExceptionInfo)))
 
+
+
+;======================== REFATORADAS =====================
+
+;so chama logic e banco de dados
+(s/defn create-user! 
+  [user :- models.user/User 
+   db :- s/atom]
+  (let [new-user (logic.user/new-user (random-uuid) user)
+        user-created (db.user/create-user! new-user db)]
+    user-created))
+
+
 ;======================== USERS =====================
 
 (defn respond-hello [request]
@@ -16,15 +29,7 @@
 
 (defn all-users [request]
   {:status 200
-   :body (str "List of all users: " @(get-in request [:components :db :atom-database]))})
-
-;so chama logic e banco de dados
-(s/defn create-user! 
-  [user :- models.user/User 
-   db :- s/atom]
-  (let [new-user (logic.user/new-user (random-uuid) user)
-        user-created (db.user/create-user! new-user db)]
-    user-created))
+   :body @(get-in request [:components :db :atom-database])})
 
 (defn user-by-id
   [request]

@@ -14,11 +14,13 @@
                                      (update context :request assoc-in [:components :db] db))}))
 
 
-(defn- res->json []
+#_(defn- res->json []
   (let [response-json {:name  ::response-json
                        :leave #(update-in % [:response] http/json-response)}]
     (interceptor/interceptor response-json)))
 
+;por ser uma macro o ja vai saber lidar com os parametros, apesar da msg de erro
+;http://pedestal.io/pedestal/0.6/reference/error-handling.html#_error_dispatch_interceptor
 (def service-error-handler
   (i.error/error-dispatch [ctx ex]
                           [{:exception-type :clojure.lang.ExceptionInfo}]
@@ -26,17 +28,27 @@
                           :else
                           (assoc ctx :response {:status 500 :body ex})))
 
-
-(defn coerce! [schema]
+;colocamos na entrada da rota para lidar com verificacao dos paramentros enviados na request.
+(defn coerce! [schema param-type]
    (interceptor/interceptor {:name  :coerce-interceptor
                             :enter (fn [context]
                                      (let [json-params (get-in context [:request :json-params])]
                                       (s/validate schema json-params)
                                        context))}))
 
-;todo EXTERNALIZE 
-;:response :body
-
+#_(defn coerce-query! [schema]
+  (interceptor/interceptor {:name  :coerce-query-interceptor
+                            :enter (fn [context]
+                                     (let [json-params (get-in context [:request :json-params])]
+                                       (s/validate schema json-params)
+                                       context))}))
+;colocamos na saída da rota para lidar com verificacao dos paramentros enviados na response.
+(defn externalize! [schema]
+  (interceptor/interceptor {:name  :coerce-interceptor
+                            :leave (fn [context]
+                                     (let [body (get-in context [:response :body])]
+                                       (s/validate schema body)
+                                       context))}))
 
 ;aqui estamos criando nosso service map 
 ;se eu nao usar o UPDATE no ::http/interceptors eu irei sobrescrever todos os outros interceptors 

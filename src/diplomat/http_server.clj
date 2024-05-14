@@ -5,7 +5,8 @@
    [controllers.user :as user]
    [diplomat.http-in.user :as d.http-in.user]
    [components.server :as c.server]
-   [wire.in.user :as w.in.user]))
+   [wire.in.user :as w.in.user]
+   [wire.out.user-response :as w.out.user]))
 
 (def common-interceptors [(body-params/body-params)])
 
@@ -20,7 +21,8 @@
                  ["/users" 
                   :post (conj common-interceptors 
                               (c.server/coerce! w.in.user/UserRequest)
-                              d.http-in.user/create-user!) 
+                              d.http-in.user/create-user!
+                              (c.server/externalize! w.out.user/UserResponse)) 
                   :route-name :create-user]
                  
                  ["/users/:id" 

@@ -15,3 +15,11 @@
                      adapters.user/internal->wire-out)]
     {:status 201 :body response}))
 
+(defn respond-hello 
+  [{:keys [query-params]}]
+  (let [response (-> query-params
+                     adapters.user/wire-in->internal)]
+    
+    {:status 200
+     :body response)}))
+
