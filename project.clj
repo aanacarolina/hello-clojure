@@ -13,10 +13,13 @@
                  [org.slf4j/log4j-over-slf4j "1.7.35"]
                  [com.stuartsierra/component "1.1.0"]
                  [prismatic/schema "1.4.1"]
-                 [org.clojure/data.json "2.5.0"]]
+                 [org.clojure/data.json "2.5.0"]
+                 [com.datomic/peer "1.0.7075"]]
   :min-lein-version "2.0.0"
-  :resource-paths ["config", "resources"] 
+  :resource-paths ["config", "resources"]
   :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "hello-clojure.server/run-dev"]}
-                   :dependencies [[io.pedestal/pedestal.service-tools "0.6.3"]]}
-             :uberjar {:aot [hello-clojure.hello/start]}}
+                   :dependencies [[io.pedestal/pedestal.service-tools "0.6.3"]
+                                  [com.github.nubank/morse "v2023.10.06.02"]]
+                   :repositories [["jitpack" "https://jitpack.io"]]}
+             :uberjar {:aot [hello-clojure.hello/start]}} 
   :main ^{:skip-aot true} components/ready-steady-go)

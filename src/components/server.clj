@@ -13,7 +13,6 @@
                             :enter (fn [context]
                                      (update context :request assoc-in [:components :db] db))}))
 
-
 #_(defn- res->json []
   (let [response-json {:name  ::response-json
                        :leave #(update-in % [:response] http/json-response)}]
@@ -29,22 +28,18 @@
                           (assoc ctx :response {:status 500 :body ex})))
 
 ;colocamos na entrada da rota para lidar com verificacao dos paramentros enviados na request.
-(defn coerce! [schema param-type]
+(defn coerce!
+  ([schema] (coerce! schema :json-params))
+  ([schema param-type]
    (interceptor/interceptor {:name  :coerce-interceptor
-                            :enter (fn [context]
-                                     (let [json-params (get-in context [:request :json-params])]
-                                      (s/validate schema json-params)
-                                       context))}))
+                             :enter (fn [context]
+                                      (let [param (get-in context [:request param-type])]
+                                        (s/validate schema param)
+                                        context))})))
 
-#_(defn coerce-query! [schema]
-  (interceptor/interceptor {:name  :coerce-query-interceptor
-                            :enter (fn [context]
-                                     (let [json-params (get-in context [:request :json-params])]
-                                       (s/validate schema json-params)
-                                       context))}))
 ;colocamos na saída da rota para lidar com verificacao dos paramentros enviados na response.
 (defn externalize! [schema]
-  (interceptor/interceptor {:name  :coerce-interceptor
+  (interceptor/interceptor {:name  :externalize-interceptor
                             :leave (fn [context]
                                      (let [body (get-in context [:response :body])]
                                        (s/validate schema body)

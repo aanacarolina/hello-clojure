@@ -11,6 +11,10 @@
    :surname s/Str
    :age s/Int})
 
+
+(s/defschema HelloRequest
+  {:name s/Str})
+
 ;gera exception, se for o caso
 (s/validate UserRequest
             {:name "aaa"

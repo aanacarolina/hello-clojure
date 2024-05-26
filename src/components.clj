@@ -1,15 +1,17 @@
 (ns components
   (:require [com.stuartsierra.component :as component]
-            [components.db :as db]
+            ;[components.db :as db]
+            [components.datomic :as datomic]
             [components.routes :as routes]
-            [components.server :as server]))
+            [components.server :as server]
+            ))
 
 ;vai agir como main por enquanto no meu projeto
 ;system map e start aqui
 
 (defn hello-system-map []
   (component/system-map
-   :database (db/new-atomdatabase)
+   :database (datomic/new-datomic-db)
    :routes (routes/new-routes)
    :server (component/using (server/new-server) [:database :routes])))
 
@@ -18,7 +20,7 @@
 (defn ready-steady-go []
   (component/start (hello-system-map))) 
   
-(components.server/restart 
+#_(components.server/restart 
  (:database (db/new-atomdatabase)) (:routes (routes/new-routes)))
 
 

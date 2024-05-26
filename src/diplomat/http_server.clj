@@ -10,8 +10,10 @@
 
 (def common-interceptors [(body-params/body-params)])
 
-(def endpoints #{["/hello" 
-                  :get user/respond-hello 
+(def endpoints #{["/hello"
+                  :get 
+                  (conj [(c.server/coerce! w.in.user/HelloRequest :query-params)]
+                     d.http-in.user/respond-hello)
                   :route-name :hello] 
                  
                  ["/users" 

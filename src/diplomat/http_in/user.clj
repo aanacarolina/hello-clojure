@@ -11,15 +11,14 @@
   [{:keys [json-params components]}] 
   (let [response (-> json-params
                      adapters.user/wire-in->internal
-                     (controllers.user/create-user! (get-in components [:db :atom-database]))
+                     (controllers.user/create-user! (get-in components [:datomic]))
                      adapters.user/internal->wire-out)]
     {:status 201 :body response}))
 
 (defn respond-hello 
   [{:keys [query-params]}]
   (let [response (-> query-params
-                     adapters.user/wire-in->internal)]
-    
-    {:status 200
-     :body response)}))
+                     adapters.user/wire-in-hello->internal
+                     controllers.user/respond-hello)] 
+    {:status 200 :body response}))
 
