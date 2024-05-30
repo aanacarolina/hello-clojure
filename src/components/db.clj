@@ -1,8 +1,11 @@
 (ns components.db
-  (:require [com.stuartsierra.component :as component]))
+  (:require [com.stuartsierra.component :as component]
+            [protocols.database :as p.database]))
 
 ;protocolo nesse caso vai procurar pela funcao que de fato implementa a maneira com que o ciclo de vida do componente vai ser gerenciado.
 (defrecord AtomDatabase []
+   p.database/Database
+  (db-type [_] :atom-db)
   ;Implementa o ciclo de vida the Lifecycle protocol
   component/Lifecycle
   ;this é um mapa dos componentes que temos temos do system 
