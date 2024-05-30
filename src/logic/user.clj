@@ -1,9 +1,10 @@
 (ns logic.user
   (:require [schema.core :as s]
-            [models.user]))
+            ;[models.user]
+            [db.schema :as datomic.model]))
 
 ;uuid aqui eh recebida por parametro pra ser pura!
 (s/defn new-user 
   [uuid :- s/Uuid 
-   model :- models.user/User]
+   model :- datomic.model/user]
   (assoc model :user/id uuid))
