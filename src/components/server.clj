@@ -11,7 +11,7 @@
 (defn- db-interceptor [db]
   (interceptor/interceptor {:name  :db-interceptor
                             :enter (fn [context]
-                                     (update context :request assoc-in [:components :db] db))}))
+                                     (update context :request assoc-in [:components :database] db))}))
 
 #_(defn- res->json []
   (let [response-json {:name  ::response-json
