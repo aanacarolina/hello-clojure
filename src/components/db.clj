@@ -11,7 +11,7 @@
   ;this é um mapa dos componentes que temos temos do system 
   (start [this]
     (println "🛢️ Starting Atom-DB")
-    (assoc this :atom-database (atom [])
+    (assoc this :atom-db (atom [])
            #_(atom {#uuid "11e735a5-feaa-458a-8c62-449ba5aa60dc" {:name "Chaves", :surname "S." :age 8 
                                                                 :accounts [
                                                                            {:account-uuid #uuid "f061f807-fd80-4536-9242-7d084a6c2b81", :status "Active", :type "checking", :amount 0} 
@@ -23,7 +23,7 @@
 
   (stop [this]
     (println "🛑🛢️ Stopping Atom-DB")
-    (assoc this :atom-database nil)))
+    (assoc this :atom-db nil)))
 
 ;factory method - cria instancias
 (defn new-atomdatabase []

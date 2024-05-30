@@ -2,8 +2,10 @@
   (:require [wire.in.user :as w.in.user]
             [schema.core :as s]
             [models.user]
+            [db.schema :as datomic.model]
             [logic.user]
-            [db.user])
+            [db.user]
+            [protocols.database :as p.database])
   (:import (clojure.lang ExceptionInfo)))
 
 
@@ -13,7 +15,7 @@
 ;so chama logic e banco de dados
 (s/defn create-user! 
   [user :- models.user/User 
-   db :- s/atom]
+   db :- p.database/IDatabase]
   (let [new-user (logic.user/new-user (random-uuid) user)
         user-created (db.user/create-user! new-user db)]
     user-created))
@@ -22,14 +24,18 @@
 ;======================== USERS =====================
 
 (defn respond-hello [request]
+  
   (let [user-name (get-in request [:query-params :name])]
+    (println "aaa")
+    (println "user-name->" user-name)
+    (println "query params" (get-in request [:query-params]))
     (if user-name
       {:status 200 :body (str "Hello, " user-name "\n")}
       {:status 200 :body (str "Hello, stranger\n" request)})))
 
 (defn all-users [request]
   {:status 200
-   :body @(get-in request [:components :db :atom-database])})
+   :body (get-in request [:components :database])})
 
 (defn user-by-id
   [request]
@@ -38,10 +44,10 @@
         user-not-found {:status  404
                         :headers {"Content-Type" "text/plain"}
                         :body    "Nao achei, gente!"}]
-    (if (not (contains? @(get-in request [:components :db :atom-database]) user-uuid))
+    (if (not (contains? @(get-in request [:components :database]) user-uuid))
       user-not-found
       {:status 200 
-       :body (@(get-in request [:components :db :atom-database]) user-uuid)})))
+       :body (@(get-in request [:components :database]) user-uuid)})))
 
 ;static methods belong to the class not to the object
 (defn query-user
@@ -51,8 +57,8 @@
         name (get-in request [:query-params :name])
         surname (get-in request [:query-params :surname])
         age  (get-in request [:query-params :age])]
-    (if (contains? @(:atom-database request) (or user-uuid name surname age))
-      {:status 200 :body (@(get-in request [:components :db :atom-database]) user-uuid)}
+    (if (contains? @(:atom-db request) (or user-uuid name surname age))
+      {:status 200 :body (@(get-in request [:components :database]) user-uuid)}
       {:status 200 :body (str "Info provided not found in the user base")})))
 
 ;melhorar depois - qdo cirar funcoes de filtro
@@ -62,15 +68,15 @@
         user-uuid (java.util.UUID/fromString user-id)
         {{:keys [name surname age] :as data} :json-params} request]
     (try (s/validate w.in.user/UserRequest data)
-      (swap! (get-in request [:components :db :atom-database]) assoc user-uuid {:name name :surname surname :age age})
-      {:status 200 :body (@(get-in request [:components :db :atom-database]) user-uuid)}
+      (swap! (get-in request [:components :database]) assoc user-uuid {:name name :surname surname :age age})
+      {:status 200 :body (@(get-in request [:components :database]) user-uuid)}
       (catch ExceptionInfo e
         {:status 400 :body (.getMessage e)}))))
 
 (defn delete-user! [request]
   (let [user-id (get-in request [:path-params :id])
         user-uuid (java.util.UUID/fromString user-id)]
-    (swap! @(get-in request [:components :db :atom-database]) dissoc user-uuid)
+    (swap! @(get-in request [:components :database]) dissoc user-uuid)
     {:status 204 :body (str "User id # " user-uuid ": deleted!")}))
 
 
@@ -82,7 +88,7 @@
     [user-uuid]
     {:status  200
      :headers {"Content-Type" "text/plain"}
-     :body (str "Account successfuly created for " (:name (@(get-in request [:components :db :atom-database]) user-uuid)) "\n"
+     :body (str "Account successfuly created for " (:name (@(get-in request [:components :database]) user-uuid)) "\n"
                 "Account(s) details: " (get @accounts user-uuid) "\n"
                 "Great Success ⭐ \n")})
 ;this needs to be shown for each account - returns now a map with info for each
@@ -103,7 +109,7 @@
     (let [user-id (get-in request [:path-params :user-id])
           user-uuid (java.util.UUID/fromString user-id)
           accounts-info (:json-params request)]
-      (try (if-not (contains? @(get-in request [:components :db :atom-database]) user-uuid)
+      (try (if-not (contains? @(get-in request [:components :database]) user-uuid)
              response-404
              (let [created-accounts (for [{:keys [account-type deposit]} accounts-info]
                                       {:account-uuid (random-uuid)
@@ -111,7 +117,7 @@
                                        :type account-type
                                        :amount deposit})]
                (do (swap! db/accounts assoc user-uuid (vec created-accounts))
-                   (swap! (get-in request [:components :db :atom-database]) assoc-in [user-uuid :accounts] (vec (map :account-uuid (get @accounts user-uuid))))
+                   (swap! (get-in request [:components :database]) assoc-in [user-uuid :accounts] (vec (map :account-uuid (get @accounts user-uuid))))
                    (response-create-account-200  user-uuid))))
            (catch Exception e
              (response-500 (.getMessage e))))))
