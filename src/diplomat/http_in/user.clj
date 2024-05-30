@@ -11,7 +11,7 @@
   [{:keys [json-params components]}] 
   (let [response (-> json-params
                      adapters.user/wire-in->internal
-                     (controllers.user/create-user! (get-in components [:datomic]))
+                     (controllers.user/create-user! (get-in components [:database]))
                      adapters.user/internal->wire-out)]
     {:status 201 :body response}))
 
