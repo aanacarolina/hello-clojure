@@ -17,5 +17,5 @@
             :db/doc "User age"}])
 
 
-#_(defn create-schema [conn]
+(defn create-schema [conn]
   (morse/inspect @(d/transact conn user :io-context "olar")))

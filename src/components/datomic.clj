@@ -1,8 +1,7 @@
 (ns components.datomic
-  (:require [datomic.api :as d]
+  (:require [com.stuartsierra.component :as component]
             [db.schema :as d-schema]
-            [com.stuartsierra.component :as component]
-            [dev.nu.morse :as morse]
+            [datomic.api :as d]
             [protocols.database :as p.database]))
 
 ;crio a string de conexao para o datomic
