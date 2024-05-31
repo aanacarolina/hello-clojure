@@ -1,7 +1,7 @@
 (ns components
   (:require [com.stuartsierra.component :as component]
             [components.db :as db]
-            ;[components.datomic :as datomic]
+            [components.datomic :as datomic]
             [components.routes :as routes]
             [components.server :as server]))
 
@@ -10,7 +10,7 @@
 
 (defn hello-system-map []
   (component/system-map
-   :database (db/new-atomdatabase)
+   :database (datomic/new-datomic-db)
    :routes (routes/new-routes)
    :server (component/using (server/new-server) [:database :routes])))
 

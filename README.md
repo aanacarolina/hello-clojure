@@ -133,3 +133,9 @@ GET nao faz parte
 - [ ] Apontar pros e contras da atual arquitetura que estamos usando agora em comparação à anterior
 - [ ] Refatorar testes de integração 
 - [ ] Criar testes unitarios (logic and adapters)
+
+
+TODO:
+Pesquisar:
+DTO 
+Modelo de dominio

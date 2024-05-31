@@ -17,7 +17,7 @@
   [user :- models.user/User 
    db :- p.database/IDatabase]
   (let [new-user (logic.user/new-user (random-uuid) user)
-        user-created (db.user/create-user! new-user (db.user/select-db db))]
+        user-created (db.user/create-user! new-user db)]
     user-created))
 
 
