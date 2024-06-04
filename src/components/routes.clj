@@ -10,7 +10,7 @@
     (println "🔀 Starting Routes")
 
     (def routes
-      (route/expand-routes http-server/endpoints ))
+      (route/expand-routes http-server/endpoints))
     (assoc this :endpoints routes))
 
   (stop [this]

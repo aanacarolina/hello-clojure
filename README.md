@@ -135,6 +135,13 @@ GET nao faz parte
 - [ ] Criar testes unitarios (logic and adapters)
 
 
+Usando com Datomic
+Rodar transactor localmente
+Instalar datomic (link)
+Run
+~/dev/datomic-pro-1.0.7075/bin/transactor -Ddatomic.printConnectionInfo=true config/samples/dev-transactor-template.properties
+(roda com logs)
+
 TODO:
 Pesquisar:
 DTO 

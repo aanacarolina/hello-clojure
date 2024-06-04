@@ -17,7 +17,7 @@
   ;this é um mapa dos componentes que temos temos do system 
   (start [this]
          (println "🛢️ Starting Datomic")
-    ;creates DB     
+    ;creates DB using the connection string     
     (d/create-database db-uri)
     (let [conn (d/connect db-uri)]
       ;(morse/launch-in-proc)

@@ -66,3 +66,9 @@ Executam as logics
 nao devem estar acopladas
 
 
+- Datomic 
+transactor 
+
+
+- Components
+Processo unico

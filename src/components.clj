@@ -10,8 +10,8 @@
 
 (defn hello-system-map []
   (component/system-map
-   :database (datomic/new-datomic-db)
    :routes (routes/new-routes)
+   :database (datomic/new-datomic-db)
    :server (component/using (server/new-server) [:database :routes])))
 
 ;TODO: restart server aqui, na vdd - verificar se server ja existe por conta da porta
