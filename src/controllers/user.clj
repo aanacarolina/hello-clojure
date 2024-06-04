@@ -20,11 +20,14 @@
         user-created (db.user/create-user! new-user db)]
     user-created))
 
+(s/defn user-by-id!
+  [id :- s/Uuid
+   db :- p.database/IDatabase]
+  (db.user/user-by-id! id db))
 
 ;======================== USERS =====================
 
-(defn respond-hello [request]
-  
+(defn respond-hello [request] 
   (let [user-name (get-in request [:query-params :name])]
     (println "aaa")
     (println "user-name->" user-name)
@@ -37,17 +40,7 @@
   {:status 200
    :body @(get-in request [:components :database])})
 
-(defn user-by-id
-  [request]
-  (let [user-id  (get-in request [:path-params :id])
-        user-uuid (java.util.UUID/fromString user-id)
-        user-not-found {:status  404
-                        :headers {"Content-Type" "text/plain"}
-                        :body    "Nao achei, gente!"}]
-    (if (not (contains? @(get-in request [:components :database]) user-uuid))
-      user-not-found
-      {:status 200 
-       :body (@(get-in request [:components :database]) user-uuid)})))
+
 
 ;static methods belong to the class not to the object
 (defn query-user

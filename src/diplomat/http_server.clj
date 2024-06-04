@@ -1,4 +1,3 @@
-
 (ns diplomat.http-server
   (:require
    [io.pedestal.http.body-params :as body-params]
@@ -28,7 +27,9 @@
                   :route-name :create-user]
                  
                  ["/users/:id" 
-                  :get user/user-by-id 
+                  :get 
+                  (conj [(c.server/coerce! w.in.user/UserById :query-params)]
+                        d.http-in.user/)
                   :route-name :user-by-id]
                  
                  ["/users/q" 

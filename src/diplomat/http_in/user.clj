@@ -22,3 +22,11 @@
                      controllers.user/respond-hello)] 
     {:status 200 :body response}))
 
+(defn user-by-id
+   [{:keys [path-params]}]
+  (let [user-uuid  (-> path-params
+                       :id
+                       parse-uuid)
+        response (controllers.user/user-by-id user-uuid)]
+      {:status 200 :body response}))
+
