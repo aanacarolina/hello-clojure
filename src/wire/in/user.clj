@@ -15,11 +15,15 @@
 (s/defschema HelloRequest
   {:name s/Str})
 
+(s/defschema UserById
+  {:id s/Uuid})
+
 ;gera exception, se for o caso
 (s/validate UserRequest
             {:name "aaa"
              :surname "bbbb"
              :age 1})
+
 
 ;nao gera exception apenas mostra que nao é igual, no caso.
 (s/check UserRequest
