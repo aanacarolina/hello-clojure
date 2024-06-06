@@ -23,10 +23,10 @@
     {:status 200 :body response}))
 
 (defn user-by-id
-   [{:keys [path-params]}]
-  (let [user-uuid  (-> path-params
-                       :id
-                       parse-uuid)
-        response (controllers.user/user-by-id user-uuid)]
+   [{:keys [path-params components]}]
+  (let [user-uuid  (parse-uuid (:id path-params))
+        response (-> user-uuid
+                     (controllers.user/user-by-id! (get-in components [:database]))
+                     adapters.user/internal->wire-out)]
       {:status 200 :body response}))
 

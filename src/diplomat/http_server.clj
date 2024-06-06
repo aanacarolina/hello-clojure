@@ -28,8 +28,9 @@
                  
                  ["/users/:id" 
                   :get 
-                  (conj [(c.server/coerce! w.in.user/UserById :query-params)]
-                        d.http-in.user/)
+                  (conj [(c.server/coerce! w.in.user/UserById :path-params)]
+                        d.http-in.user/user-by-id
+                        (c.server/externalize! w.out.user/UserResponse))
                   :route-name :user-by-id]
                  
                  ["/users/q" 
