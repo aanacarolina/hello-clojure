@@ -21,6 +21,7 @@
     (d/create-database db-uri)
     (let [conn (d/connect db-uri)]
       ;(morse/launch-in-proc)
+      ;schema sao datoms - ja startamos com essa transaction - nao necessariamente uma boa prática
       (d-schema/create-schema conn)
       (assoc this :datomic conn)))
 

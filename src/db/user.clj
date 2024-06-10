@@ -10,16 +10,21 @@
 (defn select-db [_ db-type]
   (p.database/db-type db-type))
 
+;TODO trocar ordem dos parametros aqui e nas funcoes q usam
 (defn query-datomic-by-id
   [id db]
-  (let [query '[:find (pull ?e [*])
+  (let [query '[:find [(pull ?e [*])]
                 :in $ ?id
-                :where [?e :user/id ?id]]
-        db id]
-    ;#nu/tapd id
-    (d/q query db id)))
+                :where [?e :user/id [?id]]]
+        response (first (d/q query db id))]
+    (println "!!!!!!!!!!!!")
+    (println response)
+    (println "!!!!!!!!!!!!")
+    response))
 
 
+
+  
 ; ============= defmultis =================
 
 ;return the function! não está executando - definicao do defmult
