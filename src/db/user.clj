@@ -14,7 +14,8 @@
   [id db]
   (let [query '[:find (pull ?e [*])
                 :in $ ?id
-                :where [?e :user/id ?id]]]
+                :where [?e :user/id ?id]]
+        db id]
     ;#nu/tapd id
     (d/q query db id)))
 
