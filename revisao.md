@@ -72,3 +72,10 @@ transactor
 
 - Components
 Processo unico
+
+
+
+TODO:
+Pesquisar:
+DTO 
+Modelo de dominio

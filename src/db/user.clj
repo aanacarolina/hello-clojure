@@ -5,36 +5,45 @@
             [components.db :as atom-db]
             [datomic.api :as d]))
 
-(defn select-db [_ db-type]
-  (p.database/db-type db-type)
-  )
+; ============= utils =================
 
+(defn select-db [_ db-type]
+  (p.database/db-type db-type))
+
+(defn query-datomic-by-id
+  [id db]
+  (let [query '[:find (pull ?e [*])
+                :in $ ?id
+                :where [?e :user/id ?id]]]
+    ;#nu/tapd id
+    (d/q query db id)))
+
+
+; ============= defmultis =================
+
+;return the function! não está executando - definicao do defmult
 (defmulti create-user! 
   select-db)
-;return the function! não está executando - definicao do defmult
+
+(defmulti user-by-id! 
+  select-db)
 
 
-
-;params is not used, so we could have used [_]
-(s/defmethod create-user! :datomic [user db]
-  (println "DATOMIC")
-  (println "user" user)
-  (println "!!!!!!")
-  (let [result @(d/transact (:datomic db) [user])
-        db-after (:db-after result)]
-    (println "db-after result" db-after)
-    (pull db-after info)))
+; ============= create-user! =================
 
 ;transact retorna promise / tem q pegar a info do db after
-;como fazer - query pull vai ser tbm pra user-by-id 
-
-;update
-#_(d/transact db [[:db/add [id :user/age age] ;if I know the DATOMIC ID DO ATRIBUTO
-                 :db/add [[:user/id user] :user/age age] ;If I need to retriet the DATOMIC ID do atributo
-                 :db/add []]])
+(s/defmethod create-user! :datomic [user db]
+   (let [result @(d/transact (:datomic db) [user])
+        db-after (:db-after result)] 
+    (query-datomic-by-id (:id user) db-after)))
 
 (s/defmethod create-user! :atom-db [user db]
   (last (swap! (:atom-db db) conj user)))
+
+;default handling
+(s/defmethod create-user! :default [_ params]
+  (throw (IllegalArgumentException.
+          (str "Select another database [datomic, in-memory]. I currently don't accept" (get params :type) " DB"))))
 
 ;TODO implement with dynamo
 #_(s/defmethod create-user! :dynamo [user db]
@@ -44,11 +53,22 @@
 #_(s/defmethod create-user! :dynamo [user db]
   (last (swap! (:dynamo db) conj user)))
 
-;;default handling
-(s/defmethod create-user! :default [_ params]
+; ============= user-by-id! =================
+
+(s/defmethod user-by-id! :datomic [id db]
+ (let [conn (:datomic db)
+       snapshot (d/db conn)]
+   (query-datomic-by-id id snapshot)))
+
+(s/defmethod user-by-id! :atom-db [id db]
+  (get @(:atom-db db) id))
+
+(s/defmethod user-by-id! :default [_ params]
   (throw (IllegalArgumentException.
-          (str "Select another database [datomic, in-memory]. I currently don't accept" (get params :type) " DB"))))
+          (str (get params :type) "Database not supported!\n Please use :datomic or :atom-db"))))
 
-;(create-user! {:user "carol"} (atom-db/new-atomdatabase))
-
-;(p.database/db-type (atom-db/new-atomdatabase))
+; ============= update-user! =================
+;update
+#_(d/transact db [[:db/add [id :user/age age] ;if I know the DATOMIC ID DO ATRIBUTO
+                 :db/add [[:user/id user] :user/age age] ;If I need to retriet the DATOMIC ID do atributo
+                 :db/add []]])

@@ -18,9 +18,10 @@
    db :- p.database/IDatabase]
   (let [new-user (logic.user/new-user (random-uuid) user)
         user-created (db.user/create-user! new-user db)]
+   ;#nu/tapd user-created
     user-created))
 
-(s/defn user-by-id!
+(s/defn user-by-id! 
   [id :- s/Uuid
    db :- p.database/IDatabase]
   (db.user/user-by-id! id db))

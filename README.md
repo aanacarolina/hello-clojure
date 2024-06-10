@@ -9,7 +9,6 @@
 
 Alternatively you can run the test-request functions provided.
 
-
 ### Task 1:
 - Create a Clojure WebApp
 - Create a server
@@ -135,14 +134,13 @@ GET nao faz parte
 - [ ] Criar testes unitarios (logic and adapters)
 
 
-Usando com Datomic
-Rodar transactor localmente
-Instalar datomic (link)
-Run
-~/dev/datomic-pro-1.0.7075/bin/transactor -Ddatomic.printConnectionInfo=true config/samples/dev-transactor-template.properties
-(roda com logs)
+#### Usando Datomic
+1 - Siga os tutoriais
+[Local Setup](https://docs.datomic.com/setup/setup.html) 
+[Run a Transactor](https://docs.datomic.com/peer-tutorial/transactor.html)
+Para obter logs o transactor pode ser iniciado (started) da seguinte forma:
+```~/dev/datomic-pro-1.0.7075/bin/transactor -Ddatomic.printConnectionInfo=true config/samples/dev-transactor-template.properties```
 
-TODO:
-Pesquisar:
-DTO 
-Modelo de dominio
+Para usar a interface grafica use o comando: 
+bin/console -p 8080 dev datomic:dev://localhost:4334/
+[Veja Starting the Console](https://docs.datomic.com/resources/console.html)

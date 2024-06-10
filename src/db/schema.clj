@@ -24,3 +24,5 @@
 
 (defn create-schema [conn]
   (morse/inspect @(d/transact conn user :io-context "olar")))
+
+;(morse/launch-in-proc)
