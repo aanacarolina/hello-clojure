@@ -13,15 +13,13 @@
 ;TODO trocar ordem dos parametros aqui e nas funcoes q usam
 (defn query-datomic-by-id
   [id db]
-  (let [query '[:find [(pull ?e [*])]
-                :in $ ?id
-                :where [?e :user/id [?id]]]
-        response (first (d/q query db id))]
+  (let [response (d/pull db '[:user/name :user/surname :user/age :user/id] [:user/id id])]
     (println "!!!!!!!!!!!!")
     (println response)
     (println "!!!!!!!!!!!!")
     response))
 
+;(d/pull db '[:artist/name :artist/startYear] led-zeppelin)
 
 
   
