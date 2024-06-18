@@ -9,9 +9,14 @@
 (s/def surname s/Str)
 (s/def age s/Int)
 
-(s/defschema User
+;does not validateeee!
+(s/defschema UserCreated
   {:user/id id
    :user/name user-name
    :user/surname surname
    :user/age age})
 
+(s/defschema UserNew
+  {:user/name user-name
+   :user/surname surname
+   :user/age age})
