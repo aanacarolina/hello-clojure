@@ -23,7 +23,7 @@
 (def service-error-handler
   (i.error/error-dispatch [ctx ex]
                           [{:exception-type :clojure.lang.ExceptionInfo}]
-                          (assoc ctx :response {:status 400 :body "Wrong params"})
+                          (assoc ctx :response {:status 400 :body ex})
                           :else
                           (assoc ctx :response {:status 500 :body ex})))
 
@@ -42,6 +42,9 @@
   (interceptor/interceptor {:name  :externalize-interceptor
                             :leave (fn [context]
                                      (let [body (get-in context [:response :body])]
+                                       (println "???????????")
+                                       (println context)
+                                       (println "???????????")
                                        (s/validate schema body)
                                        context))}))
 

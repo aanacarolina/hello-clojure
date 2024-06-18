@@ -19,6 +19,7 @@
 (defn ready-steady-go []
   (component/start (hello-system-map)))
 
+
 #_(components.server/restart
    (:database (db/new-atomdatabase)) (:routes (routes/new-routes)))
 
