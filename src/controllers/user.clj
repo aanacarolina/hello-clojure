@@ -13,12 +13,11 @@
 ;======================== REFATORADAS =====================
 
 ;so chama logic e banco de dados
-(s/defn create-user! 
-  [user :- models.user/User 
+(s/defn create-user! :- models.user/UserCreated
+  [user :- models.user/UserNew 
    db :- p.database/IDatabase]
   (let [new-user (logic.user/new-user (random-uuid) user)
-        user-created (db.user/create-user! new-user db)]
-   ;#nu/tapd user-created
+        user-created (db.user/create-user! new-user db)] 
     user-created))
 
 (s/defn user-by-id! 
