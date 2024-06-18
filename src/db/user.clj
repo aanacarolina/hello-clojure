@@ -13,16 +13,9 @@
 ;TODO trocar ordem dos parametros aqui e nas funcoes q usam
 (defn query-datomic-by-id
   [id db]
-  (let [response (d/pull db '[:user/name :user/surname :user/age :user/id] [:user/id id])]
-    (println "!!!!!!!!!!!!")
-    (println response)
-    (println "!!!!!!!!!!!!")
-    response))
+  (d/pull db '[:user/name :user/surname :user/age :user/id] [:user/id id]))
 
-;(d/pull db '[:artist/name :artist/startYear] led-zeppelin)
-
-
-  
+ 
 ; ============= defmultis =================
 
 ;return the function! não está executando - definicao do defmult
@@ -38,9 +31,14 @@
 ;transact retorna promise / tem q pegar a info do db after
 (s/defmethod create-user! :datomic [user db]
    (let [result @(d/transact (:datomic db) [user])
-        db-after (:db-after result)] 
-    (query-datomic-by-id (:id user) db-after)))
+        db-after (:db-after result)
+         response (query-datomic-by-id (:user/id user) db-after)] 
+     (println "++++++++++++++++")
+     (println response)
+    response))
 
+
+ 
 (s/defmethod create-user! :atom-db [user db]
   (last (swap! (:atom-db db) conj user)))
 
