@@ -42,9 +42,6 @@
   (interceptor/interceptor {:name  :externalize-interceptor
                             :leave (fn [context]
                                      (let [body (get-in context [:response :body])]
-                                       (println "???????????")
-                                       (println context)
-                                       (println "???????????")
                                        (s/validate schema body)
                                        context))}))
 
