@@ -21,7 +21,8 @@
              {:source-paths   ["dev"]
               :aliases {"run-dev" ["trampoline" "run" "-m" "hello-clojure.server/run-dev"]}
               :dependencies [[io.pedestal/pedestal.service-tools "0.6.3"]
-                             [com.github.nubank/morse "v2023.10.06.02"]]
+                             [com.github.nubank/morse "v2023.10.06.02"]
+                             [nubank/state-flow "5.17.0"]]
               :repositories [["jitpack" "https://jitpack.io"]]}
              :uberjar {:aot [hello-clojure.hello/start]}} 
   :main ^{:skip-aot true} components/ready-steady-go)

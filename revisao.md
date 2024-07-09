@@ -73,7 +73,10 @@ transactor
 - Components
 Processo unico
 
-
+- Tests
+seed - dados pra popular db 
+mock - dados ou funcoes de mentirinha para qualquer parte dos tests, nao so db.
+duble - funcao que executada no lugar da funcao real
 
 TODO:
 Pesquisar:

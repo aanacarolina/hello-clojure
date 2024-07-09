@@ -143,7 +143,12 @@ GET nao faz parte
 ## Task 7:
 - [ ] Refatorar tudo para utilizar a arquitetura atual
 - [ ] Apontar pros e contras da atual arquitetura que estamos usando agora em comparação à anterior
-- [ ] Refatorar testes de integração 
+- [ ] Refatorar testes de integração (usando state-flow)
+- [ ] Como criar mocks http server (server que starta e para pra cada execucao dos testes = setup and teardown)
+- [ ] Criar um flow e testar repetidas vezes algum get (vai startar o component do server e vai dar stop no server?)
 - [ ] Criar testes unitarios (logic and adapters)
+
+
+
 
 
