@@ -10,13 +10,13 @@
    :user/surname surname
    :user/age age})
 
-(s/defn wire-in-hello->internal :- models.user/user-name
-  [{:keys [name]} :- w.in.user/UserRequest]
-  {:name name})
-
 (s/defn internal->wire-out :- w.out.user/UserResponse
   [{:user/keys [id name surname age]} :- models.user/UserCreated] 
   {:id id
    :name name
    :surname surname
    :age age})
+
+(s/defn wire-in-hello->internal :- models.user/user-name
+  [{:keys [name]} :- w.in.user/HelloRequest]
+  {:name name})

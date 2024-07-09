@@ -8,8 +8,6 @@
             [protocols.database :as p.database])
   (:import (clojure.lang ExceptionInfo)))
 
-
-
 ;======================== REFATORADAS =====================
 
 ;so chama logic e banco de dados
@@ -25,16 +23,16 @@
    db :- p.database/IDatabase]
   (db.user/user-by-id! id db))
 
+(s/defn respond-hello 
+  [name :- s/Str]
+  (let [user-name (:name name)]
+    (if user-name
+      (str "Hi, " user-name "\n")
+      (str "Hello, stranger \n"))))
+
 ;======================== USERS =====================
 
-(defn respond-hello [request] 
-  (let [user-name (get-in request [:query-params :name])]
-    (println "aaa")
-    (println "user-name->" user-name)
-    (println "query params" (get-in request [:query-params]))
-    (if user-name
-      {:status 200 :body (str "Hello, " user-name "\n")}
-      {:status 200 :body (str "Hello, stranger\n" request)})))
+
 
 (defn all-users [request]
   {:status 200

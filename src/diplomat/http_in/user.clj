@@ -19,7 +19,7 @@
   [{:keys [query-params]}]
   (let [response (-> query-params
                      adapters.user/wire-in-hello->internal
-                     controllers.user/respond-hello)] 
+                     controllers.user/respond-hello )] 
     {:status 200 :body response}))
 
 (defn user-by-id
