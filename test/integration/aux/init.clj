@@ -1,20 +1,31 @@
 (ns integration.aux.init
-   (:require [schema.core :as s]
-             [state-flow.api]
-             [state-flow.helpers.runners :as runners]
-             [components]))
-  
-  ;redefines
-  (defn init! []
-    (s/with-fn-validation
-      {:system (components/run-dev!)}))
-  
-  (defmacro defflow
-    [name & forms]
-    (let [default-parameters   {:init       init!
-                                :runner     runners/run-with-fn-validation}
-          [parameters & flows] (if (map? (first forms))
-                                 (let [[override & rem] forms]
-                                   (cons (merge default-parameters override) rem))
-                                 (cons default-parameters forms))]
-      `(state-flow.api/defflow ~name ~parameters ~@flows)))
+  "Init functions for state-flow tests."
+  (:refer-clojure :exclude [run!])
+  (:require [components] 
+            [schema.core :as s]
+            [state-flow.cljtest] ;; for defflow
+            [state-flow.core :as state-flow]))
+
+(defn init! [] 
+  {:system (components/run-dev!)})
+
+(defn- run-flow
+  [flow state]
+  (s/with-fn-validation
+    (state-flow/run* {:init (constantly state)}
+                     flow)))
+
+
+(defmacro defflow
+  "recebe nome do defflow e os flows - retorna codigo a ser executado para cada flow"
+  [name & flows]
+  `(state-flow.cljtest/defflow ~name {:init   init!
+                                      :runner #'run-flow}
+     ~@flows))
+
+
+;~ evita que  simbolo seja executado
+;flow nesse caso é um atomo - retorna um estado
+;ver https://clojure.org/reference/reader#syntax-quote
+;convenção: funcoes com WITH geralmente são macros
+
