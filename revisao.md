@@ -81,4 +81,9 @@ duble - funcao que executada no lugar da funcao real
 TODO:
 Pesquisar:
 DTO 
-Modelo de dominio
+Modelo de dominio - https://guia.dev/pt/pillars/business/domain-model.html
+
+Entity: modelos da aplicação no banco
+Repository: camada de comunicação com o banco
+Service: regras de negócio
+Controller: rotas, respostas e requisições com o cliente

@@ -48,7 +48,9 @@ Alternatively you can run the test-request functions provided.
 - Which server is best for this task?
 Jetty 11 is the default container used with Pedestal. I decided to use Pedestal because it is the web framework must used at Nubank services.
 
-Jetty provides a web server and servlet container, additionally providing support for HTTP/2, WebSocket, OSGi, JMX, JNDI, JAAS and many other integrations. (and I have no idea of what 98% of this sentence means ⚠️)
+Jetty is a web server that contains: a servlet container, additionally providing support for HTTP/2, WebSocket, OSGi, JMX, JNDI, JAAS and many other integrations. (and I have no idea of what 98% of this sentence means ⚠️)
+ - web server - 
+ - servlet container - controla meu ::http (o basico do req/res e seus "componentes" )
 
 
 ## Task 2:
@@ -142,11 +144,11 @@ GET nao faz parte
 
 ## Task 7:
 - [ ] Refatorar tudo para utilizar a arquitetura atual
-- [ ] Apontar pros e contras da atual arquitetura que estamos usando agora em comparação à anterior
+- [x] Apontar pros e contras da atual arquitetura que estamos usando agora em comparação à anterior
 - [ ] Refatorar testes de integração (usando state-flow)
 - [ ] Como criar mocks http server (server que starta e para pra cada execucao dos testes = setup and teardown)
 - [ ] Criar um flow e testar repetidas vezes algum get (vai startar o component do server e vai dar stop no server?)
-- [ ] Criar testes unitarios (logic and adapters)
+- [x] Criar testes unitarios (logic and adapters)
 
 
 
