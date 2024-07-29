@@ -24,11 +24,10 @@
   (db.user/user-by-id! id db))
 
 (s/defn respond-hello 
-  [name :- s/Str]
-  (let [user-name (:name name)]
-    (if user-name
-      (str "Hi, " user-name "\n")
-      (str "Hello, stranger \n"))))
+  [name :- (s/maybe s/Str)]
+  (if name
+    (str "Hi, " name "\n")
+    (str "Hello, stranger \n")))
 
 ;======================== USERS =====================
 

@@ -17,6 +17,6 @@
    :surname surname
    :age age})
 
-(s/defn wire-in-hello->internal :- models.user/user-name
+(s/defn wire-in-hello->internal :- (s/maybe models.user/user-name)
   [{:keys [name]} :- w.in.user/HelloRequest]
-  {:name name})
+  name)

@@ -13,7 +13,7 @@
 
 
 (s/defschema HelloRequest
-  {:name s/Str})
+  (s/maybe {(s/optional-key :name) s/Str}))
 
 (s/defschema UserById
   {:id s/Uuid})
