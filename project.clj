@@ -19,6 +19,8 @@
   :resource-paths ["config", "resources"]
   :profiles {:dev  
              {:source-paths   ["dev"]
+              ;qdo nao tenho repl-options ja tem um default? - TODO - perguntar no canal
+              ;ler: https://github.com/technomancy/leiningen/blob/github/sample.project.clj
               :aliases {"run-dev" ["trampoline" "run" "-m" "hello-clojure.server/run-dev"]}
               :dependencies [[io.pedestal/pedestal.service-tools "0.6.3"]
                              [com.github.nubank/morse "v2023.10.06.02"]
