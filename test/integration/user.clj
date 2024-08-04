@@ -1,16 +1,17 @@
 (ns integration.user
   (:require
    [state-flow.api :refer [flow match? get-state return]] 
-   [state-flow.state :as state ]
+   [state-flow.state :as state]
    [integration.aux.init :refer [defflow]]
+   [integration.aux.http :as helper.http]
    [io.pedestal.http :as http]
-   [io.pedestal.test :as test] ))
+   [io.pedestal.test :as test]))
 
 ;;===================== PLAIN FLOW lib
 ;setup =  components
 ;http/endpoints = http.helpers - 
 ;https://github.com/nubank/state-flow?tab=readme-ov-file#writing-helpers
-
+; precisei criar o helper que as docs ja tinham prontos - utilizando o servelet do jetty (http/service-fn) e passando para o funcao pedestal da funcao (test/response-for)
 
 #_(flow "Given:
        - a server running
@@ -45,17 +46,14 @@
           (match? {:status 200
                    :body   "Hello, stranger \n"}
                   (servlet/request {:method :get :uri "/hello"}))))
-#_(defn servlet []
-   (get @(get-in (flow "a" (state/get)) [:system :serve :server]) ::http/service-fn))
 
-
-(defn servlet []
-  (flow "a" (state/return (get-state (comp ::http/service-fn deref :server :serve :system)))))
-
+;-----
 
 (defflow hello-endpoint
-  (flow "testing" 
-        [servlet (servlet)]
-        (match? 1  (test/response-for servlet :get "/hello"))))
+  (flow "testing"
+        (match? {:status 200, :body "Hello, stranger \n"}  (helper.http/request :get "/hello"))))
+
+;TODO test other endpoints
+
 
 
