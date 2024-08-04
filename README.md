@@ -151,6 +151,11 @@ GET nao faz parte
 - [x] Criar testes unitarios (logic and adapters)
 
 
+## Task 8:
+- [ ] flow de create - de response
+- [ ] flow de db persisted
+- [ ] criar helper do component de DB
+- [ ] Revisar documentacao do helper (adicionar exemplo mais basico com components - 5 steps da revisao)
 
 
 

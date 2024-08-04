@@ -87,3 +87,10 @@ Entity: modelos da aplicação no banco
 Repository: camada de comunicação com o banco
 Service: regras de negócio
 Controller: rotas, respostas e requisições com o cliente
+
+State flow
+
+inicializar components com init
+pegar o componenent de http para fazer o teste do pedestal (req)
+criar flow de requisicoes com state e fazendo a requisicao
+
