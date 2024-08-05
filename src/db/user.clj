@@ -33,8 +33,6 @@
    (let [result @(d/transact (:datomic db) [user])
         db-after (:db-after result)
          response (query-datomic-by-id (:user/id user) db-after)] 
-     (println "++++++++++++++++")
-     (println response)
     response))
 
 
