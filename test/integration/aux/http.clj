@@ -15,5 +15,6 @@
          (return (test/response-for http verb url))))
   ([verb url body]
    (flow "make request"
-         [http (get-state fetch-servelet)]
-         (return (test/response-for http verb url body)))))
+         [http (get-state fetch-servelet)] 
+         (return (test/response-for http verb url :body body :headers {"Content-Type" "application/json"})))))
+
