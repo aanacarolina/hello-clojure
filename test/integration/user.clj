@@ -1,9 +1,10 @@
 (ns integration.user
   (:require
-   [state-flow.api :refer [flow match? get-state return]] 
+   [state-flow.api :refer [flow match? get-state return]]
    [state-flow.state :as state]
    [integration.aux.init :refer [defflow]]
    [integration.aux.http :as helper.http]
+   [integration.aux.db :as helper.db]
    [io.pedestal.http :as http]
    [io.pedestal.test :as test]))
 
@@ -49,11 +50,29 @@
 
 ;-----
 
+(def user-created {:id  (uuid?)
+                   :name "John"
+                   :surname "Doe"
+                   :age 30})
+
 (defflow hello-endpoint
-  (flow "testing"
+  (flow "Given a request without a name (query param) to /hello, should return hello world  message"
         (match? {:status 200, :body "Hello, stranger \n"}  (helper.http/request :get "/hello"))))
 
-;TODO test other endpoints
+(defflow create-user-endpoint
+  (flow "Given a request to create a user should return a user"
+        (match? {:status 201, #_#_:body user-created} ;WITH REDEF DO ID? OU ALGO DO STATE-FLOW
+                (helper.http/request :post "/users"
+                                      "{ \"name\": \"John\",
+                                        \"surname\": \"Doe\",
+                                        \"age\": 30}"))
+        (flow "Given a user creation should be able to query this user on DB to confirm persistance" ;flow dentro do mesmo flow! 
+                (match? user-created
+                        (helper.db/datomic-query (:id user-created))))))
 
+;TODO test create endpoints
+
+
+;https://clojuredocs.org/clojure.core/with-redefs
 
 
