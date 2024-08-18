@@ -94,3 +94,20 @@ inicializar components com init
 pegar o componenent de http para fazer o teste do pedestal (req)
 criar flow de requisicoes com state e fazendo a requisicao
 
+;;===================== PLAIN FLOW lib
+;setup =  components
+;http/endpoints = http.helpers - 
+;https://github.com/nubank/state-flow?tab=readme-ov-file#writing-helpers
+; precisei criar o helper que as docs ja tinham prontos - utilizando o servelet do jetty (http/service-fn) e passando para o funcao pedestal da funcao (test/response-for)
+;;===================== NUBANK Testing routes with Servlet
+;https://nubank.atlassian.net/wiki/spaces/ENGCHAP/pages/263675510883/Integration+test#Testing-routes-with-Servlet
+
+;defflow é uma macro -  usa o componente para iniciliaza o servidor e usa datomic in mem
+;setup = sim  -  teardown = (nenhum)?
+
+
+;;===================== CALCULUS-101 repo
+; https://github.com/nubank/calculus-101
+
+
+
