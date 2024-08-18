@@ -146,15 +146,15 @@ GET nao faz parte
 - [ ] Refatorar tudo para utilizar a arquitetura atual
 - [x] Apontar pros e contras da atual arquitetura que estamos usando agora em comparação à anterior
 - [ ] Refatorar testes de integração (usando state-flow)
-- [ ] Como criar mocks http server (server que starta e para pra cada execucao dos testes = setup and teardown)
+- [x] Como criar mocks http server (server que starta e para pra cada execucao dos testes = setup and teardown)
 - [ ] Criar um flow e testar repetidas vezes algum get (vai startar o component do server e vai dar stop no server?)
 - [x] Criar testes unitarios (logic and adapters)
 
 
 ## Task 8:
-- [ ] flow de create - de response
+- [x] flow de create - de response
 - [ ] flow de db persisted
-- [ ] criar helper do component de DB
+- [x] criar helper do component de DB
 - [ ] Revisar documentacao do helper (adicionar exemplo mais basico com components - 5 steps da revisao)
 
 
