@@ -9,6 +9,7 @@
 (defn init! [] 
   {:system (components/run-dev!)})
 
+;define checagem de type tbm 
 (defn- run-flow
   [flow state]
   (s/with-fn-validation
