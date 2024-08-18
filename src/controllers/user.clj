@@ -26,8 +26,8 @@
 (s/defn respond-hello 
   [name :- (s/maybe s/Str)]
   (if name
-    (str "Hi, " name "\n")
-    (str "Hello, stranger \n")))
+    {:msg (str "Hi, " name)}
+    {:msg (str "Hello, stranger")}))
 
 ;======================== USERS =====================
 
