@@ -7,19 +7,19 @@
 
 ;http-in chama uma controller e obtem uma resposta com status code 
 ;refatorar 
-(defn create-user! 
-  [{:keys [json-params components]}] 
+(defn create-user!
+  [{:keys [json-params components]}]
   (let [response (-> json-params
                      adapters.user/wire-in->internal
                      (controllers.user/create-user! (get-in components [:database]))
                      adapters.user/internal->wire-out)]
     {:status 201 :body response}))
 
-(defn respond-hello 
+(defn respond-hello
   [{:keys [query-params]}]
   (let [response (-> query-params
                      adapters.user/wire-in-hello->internal
-                     controllers.user/respond-hello )] 
+                     controllers.user/respond-hello)]
     {:status 200 :body response}))
 
 (defn user-by-id
@@ -28,5 +28,6 @@
         response (-> user-uuid
                      (controllers.user/user-by-id! (get-in components [:database]))
                      adapters.user/internal->wire-out)]
-      {:status 200 :body response}))
+    {:status 200 :body response}))
+
 

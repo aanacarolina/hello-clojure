@@ -18,8 +18,6 @@
    :database (component/using (datomic/new-datomic-db) [:config])
    :server (component/using (server/new-server) [:database :routes])))
 
-;TODO: restart server aqui, na vdd - verificar se server ja existe por conta da porta
-
 (defn ready-steady-go!
   ([] (ready-steady-go! {}))
   ([initial-state]

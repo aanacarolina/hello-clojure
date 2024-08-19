@@ -15,14 +15,14 @@
   [id db]
   (d/pull db '[:user/name :user/surname :user/age :user/id] [:user/id id]))
 
- 
+
 ; ============= defmultis =================
 
 ;return the function! não está executando - definicao do defmult
-(defmulti create-user! 
+(defmulti create-user!
   select-db)
 
-(defmulti user-by-id! 
+(defmulti user-by-id!
   select-db)
 
 
@@ -30,13 +30,11 @@
 
 ;transact retorna promise / tem q pegar a info do db after
 (s/defmethod create-user! :datomic [user db]
-   (let [result @(d/transact (:datomic db) [user])
+  (let [result @(d/transact (:datomic db) [user])
         db-after (:db-after result)
-         response (query-datomic-by-id (:user/id user) db-after)] 
+        response (query-datomic-by-id (:user/id user) db-after)]
     response))
 
-
- 
 (s/defmethod create-user! :atom-db [user db]
   (last (swap! (:atom-db db) conj user)))
 
@@ -47,18 +45,18 @@
 
 ;TODO implement with dynamo
 #_(s/defmethod create-user! :dynamo [user db]
-  (last (swap! (:dynamo db) conj user)))
+    (last (swap! (:dynamo db) conj user)))
 
 ;TODO implement with common-datomic
 #_(s/defmethod create-user! :dynamo [user db]
-  (last (swap! (:dynamo db) conj user)))
+    (last (swap! (:dynamo db) conj user)))
 
 ; ============= user-by-id! =================
 
 (s/defmethod user-by-id! :datomic [id db]
- (let [conn (:datomic db)
-       snapshot (d/db conn)]
-   (query-datomic-by-id id snapshot)))
+  (let [conn (:datomic db)
+        snapshot (d/db conn)]
+    (query-datomic-by-id id snapshot)))
 
 (s/defmethod user-by-id! :atom-db [id db]
   (get @(:atom-db db) id))
@@ -70,5 +68,5 @@
 ; ============= update-user! =================
 ;update
 #_(d/transact db [[:db/add [id :user/age age] ;if I know the DATOMIC ID DO ATRIBUTO
-                 :db/add [[:user/id user] :user/age age] ;If I need to retriet the DATOMIC ID do atributo
-                 :db/add []]])
+                   :db/add [[:user/id user] :user/age age] ;If I need to retriet the DATOMIC ID do atributo
+                   :db/add []]])
