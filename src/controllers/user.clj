@@ -1,4 +1,4 @@
-(ns controllers.user 
+(ns controllers.user
   (:require [wire.in.user :as w.in.user]
             [schema.core :as s]
             [models.user]
@@ -12,18 +12,19 @@
 
 ;so chama logic e banco de dados
 (s/defn create-user! :- models.user/UserCreated
-  [user :- models.user/UserNew 
+  [user :- models.user/UserNew
    db :- p.database/IDatabase]
   (let [new-user (logic.user/new-user (random-uuid) user)
-        user-created (db.user/create-user! new-user db)] 
+        user-created (db.user/create-user! new-user db)]
     user-created))
 
-(s/defn user-by-id! 
+(s/defn user-by-id! :- models.user/UserCreated
   [id :- s/Uuid
    db :- p.database/IDatabase]
-  (db.user/user-by-id! id db))
+  (let [user-by-id (db.user/user-by-id! id db)]
+    user-by-id))
 
-(s/defn respond-hello 
+(s/defn respond-hello
   [name :- (s/maybe s/Str)]
   (if name
     {:msg (str "Hi, " name)}
@@ -31,13 +32,9 @@
 
 ;======================== USERS =====================
 
-
-
 (defn all-users [request]
   {:status 200
    :body @(get-in request [:components :database])})
-
-
 
 ;static methods belong to the class not to the object
 (defn query-user
@@ -58,10 +55,10 @@
         user-uuid (java.util.UUID/fromString user-id)
         {{:keys [name surname age] :as data} :json-params} request]
     (try (s/validate w.in.user/UserRequest data)
-      (swap! (get-in request [:components :database]) assoc user-uuid {:name name :surname surname :age age})
-      {:status 200 :body (@(get-in request [:components :database]) user-uuid)}
-      (catch ExceptionInfo e
-        {:status 400 :body (.getMessage e)}))))
+         (swap! (get-in request [:components :database]) assoc user-uuid {:name name :surname surname :age age})
+         {:status 200 :body (@(get-in request [:components :database]) user-uuid)}
+         (catch ExceptionInfo e
+           {:status 400 :body (.getMessage e)}))))
 
 (defn delete-user! [request]
   (let [user-id (get-in request [:path-params :id])

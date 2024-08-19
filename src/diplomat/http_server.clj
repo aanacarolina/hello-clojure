@@ -28,7 +28,7 @@
                  
                  ["/users/:id" 
                   :get 
-                  (conj [(c.server/coerce! w.in.user/UserById :path-params)]
+                  (conj [(c.server/coerce-path-uuid! w.in.user/UserById)]
                         d.http-in.user/user-by-id
                         (c.server/externalize! w.out.user/UserResponse))
                   :route-name :user-by-id]

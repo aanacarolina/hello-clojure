@@ -1,5 +1,6 @@
 (ns wire.in.user
-  (:require [schema.core :as s]))
+  (:require [schema.core :as s])
+  (:import [java.util UUID]))
 
 ;especificar o que vamos receber
 ;sanitization - TODO ler mais
@@ -31,5 +32,10 @@
           :surname "bbbb"
           :age 1})
 
+
+(s/check UserById 
+         {:id #uuid "b6883c0a-0342-4007-9966-bc2dfa6b109e"})
+
 ;Printa o schema definido 
 (s/explain UserRequest)
+;(s/validate UserById {:id "b6883c0a-0342-4007-9966-bc2dfa6b109e"})

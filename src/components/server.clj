@@ -37,6 +37,17 @@
                                         (s/validate schema param)
                                         context))})))
 
+(defn coerce-path-uuid!
+  ([schema]
+   (interceptor/interceptor {:name  :coerce-interceptor
+                             :enter (fn [context]
+                                      (let [param (get-in context [:request :path-params])
+                                            parse-id-to-uuid (parse-uuid (:id param))] 
+                                        (s/validate schema {:id parse-id-to-uuid})
+                                        context))})))
+
+
+
 ;colocamos na saída da rota para lidar com verificacao dos paramentros enviados na response.
 (defn externalize! [schema]
   (interceptor/interceptor {:name  :externalize-interceptor
