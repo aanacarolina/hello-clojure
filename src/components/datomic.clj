@@ -17,15 +17,15 @@
   component/Lifecycle
   ;this é um mapa dos componentes que temos temos do system 
   (start [this]
-         (println "🛢️ Starting Datomic")
+    (println "🛢️ Starting Datomic")
     ;creates DB using the connection string (db-uri)     
-    (let [db-uri (c-pro/get-value config :database-uri)] 
-     (d/create-database db-uri)
-    (let [conn (d/connect db-uri)]
+    (let [db-uri (c-pro/get-value config :database-uri)]
+      (d/create-database db-uri)
+      (let [conn (d/connect db-uri)]
       ;(morse/launch-in-proc)
       ;schema sao datoms - ja startamos com essa transaction - nao necessariamente uma boa prática
-      (d-schema/create-schema conn)
-      (assoc this :datomic conn))))
+        (d-schema/create-schema conn)
+        (assoc this :datomic conn))))
 
   (stop [this]
     (println "🛑🛢️ Stopping Datomic")
@@ -36,3 +36,21 @@
 ;factory method - cria instancias
 (defn new-datomic-db []
   (map->Datomic {}))
+
+;overriding - sobrescrevi o metodo toString para retornar sempre o que for definido
+;precisa adicionar o this sempre q for sobrescrever
+(defrecord Pessoa [nome]
+  Object
+  (toString[this] "Carolina"))
+
+
+(def carol
+(Pessoa. "Carol"))
+
+(.hashCode carol)
+(.toString carol)
+
+(def thales
+  (map->Pessoa {:nome "Thales"}))
+
+(.toString thales)
