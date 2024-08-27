@@ -35,7 +35,6 @@ repl-port
 /logs/
 
 # Builds
-out/
 build/
 
 .clj-kondo/*
@@ -44,3 +43,6 @@ build/
 
 # dev
 dev/*
+
+# debug docs
+doc/debug/*
