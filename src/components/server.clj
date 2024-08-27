@@ -96,6 +96,7 @@
 ;pegar do contexto (request esta dentro do contexto, mas o db NAO, entao iremos coloca-lo no contexto)
 ;fazer o mesmo para os outros components
 
+
 (defrecord Server [database routes]
   component/Lifecycle
   (start [this]
@@ -113,3 +114,7 @@
 
 (defn new-server []
   (map->Server {}))
+
+;-> ==  .  == new - criando uma nova instancia do Record
+;se queremos criar com a notação de mapa direto, so criar o map->TypeName
+; ver documentação aqui: https://clojuredocs.org/clojure.core/defrecord 
