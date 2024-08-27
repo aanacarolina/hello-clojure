@@ -93,7 +93,12 @@ Processo unico
 são nossas dependencias
 
 defrecord 
-maneiras
+
+Resumo das Diferenças
+->myCar: Construtor posicional que requer valores na ordem exata dos campos definidos no defrecord.
+Car. (Java Interop Syntax): Sintaxe semelhante a construtores Java, também requer valores na ordem exata.
+map->Car: Construtor baseado em map, permite a criação do record a partir de dados organizados em um map, sem se preocupar com a ordem.
+
 
 - Tests
 seed - dados pra popular db 
