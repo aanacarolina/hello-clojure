@@ -12,6 +12,24 @@ PATH RECURSO (entidade - pode ser dinamico)
 STATUS CODES
 HATEOAS (Hypermedia as the Engine of Application State)
 
+
+- get - tem limites menores do que consegue enviar pelos params
+inclusive por limites impostos pelo servidor 
+    tbm questoes de securanca, mesmo enconded
+
+ headers: access-control-allow-origin:(verificar quem está fazendo a solicitação para aceitar ou nao)
+
+ - path-params = Identifica o recurso especificado do dominio, assim como no nosso diretorio local 
+ (/Users/carolina.silva/dev/nu)
+ Usamos por convenção um placeholder para que seja seja preenchido dinamicamente 
+ /Users/:user-login/dev/nu
+  www.xxx.com/users/:user-id/permissions 
+  www.xxx.com/users/:user-id/permissions/:id-permission 
+  www.xxx.com/doc/debug/get/works (navegação) OU www.xxx.com/doc/debug/get?status=works(filtro)
+ ----
+
+ - query-params = filtrar informações
+
 - O que é HTTP?
 Protocolo de transferencia de hipertexto
 Uma string contendo todas as informacoes necessarias para comunicar com servidores.
@@ -72,6 +90,10 @@ transactor
 
 - Components
 Processo unico
+são nossas dependencias
+
+defrecord 
+maneiras
 
 - Tests
 seed - dados pra popular db 
