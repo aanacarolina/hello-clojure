@@ -30,6 +30,8 @@
   (->AtomDatabase))
 
 ;-> ==  .  == new - criando uma nova instancia do Record
+;se queremos criar com a notação de mapa direto, so criar o map->TypeName
+; ver documentação aqui: https://clojuredocs.org/clojure.core/defrecord 
 
 ;opcional, mas é util pois podemos ter varias maneiras de criar um record de DB.
 ;alem de ser melhor para criar um unico ponto para o record - que centralizar o comportamento.
