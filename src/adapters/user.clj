@@ -1,5 +1,6 @@
 (ns adapters.user
   (:require [wire.in.user :as w.in.user]
+            [wire.out.user-response :as w.out.user-response]
             [schema.core :as s]
             [models.user]))
 
@@ -9,7 +10,7 @@
    :user/surname surname
    :user/age age})
 
-(s/defn internal->wire-out :- models.user/UserNew
+(s/defn internal->wire-out :- w.out.user-response/UserResponse
   [{:user/keys [id name surname age]} :- models.user/UserCreated]
   {:id id
    :name name
