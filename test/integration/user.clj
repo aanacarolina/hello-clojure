@@ -22,8 +22,8 @@
 
 (defflow create-user-endpoint
   (flow "Given a request to create a user should return a user"
-        (match? 1
-                (return (helper.http/request :post "/users" user-json)))
+        (match? expected-response
+                (helper.http/request :post "/users" user-json))
 
         #_(flow "Given a succesful user creation should query this user on DB to confirm persistance" ;flow dentro do mesmo flow! 
                 (match?  {:id created-id
