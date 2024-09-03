@@ -23,9 +23,9 @@
 (def service-error-handler
   (i.error/error-dispatch [ctx ex]
                           [{:exception-type :clojure.lang.ExceptionInfo}]
-                          (assoc ctx :response {:status 400 :body ex})
+                          (assoc ctx :response {:status 400 :body (.getData ex)})
                           :else
-                          (assoc ctx :response {:status 500 :body ex})))
+                          (assoc ctx :response {:status 500 :body (.getData ex)})))
 
 ;colocamos na entrada da rota para lidar com verificacao dos paramentros enviados na request.
 (defn coerce!
