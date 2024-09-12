@@ -92,7 +92,13 @@ transactor
 Processo unico
 são nossas dependencias
 
-defrecord 
+- defrecord 
+conjunto de instruções
+tipo classes 
+-> ==  .  == new : criando uma nova instancia do Record
+se queremos criar com a notação de mapa direto, so criar o map->TypeName
+pq seria um mapa? pq é a estrutra 
+Ver documentação aqui: https://clojuredocs.org/clojure.core/defrecord 
 
 Resumo das Diferenças
 ->myCar: Construtor posicional que requer valores na ordem exata dos campos definidos no defrecord.
@@ -135,6 +141,12 @@ criar flow de requisicoes com state e fazendo a requisicao
 
 ;;===================== CALCULUS-101 repo
 ; https://github.com/nubank/calculus-101
+
+
+
+
+exception info
+
 
 
 
