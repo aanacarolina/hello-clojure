@@ -20,33 +20,23 @@
         (match? {:status 200 :body {:msg "Hello, stranger"}}
                 say-hello)))
 
-(defflow create-user-endpoint
+(defflow crud-endpoints
   (flow "Given a request to create a user should return a user"
-        (match? expected-response
-                (helper.http/request :post "/users" user-json))
-
-        #_(flow "Given a succesful user creation should query this user on DB to confirm persistance" ;flow dentro do mesmo flow! 
-                (match?  {:id created-id
-                          :name "John"
-                          :surname "Doe"
-                          :age 30}
-                         (helper.db/datomic-query (:id  (:id completed-user-creation)))))))
-
-#_(defflow get-user-by-id-endpoint
-  (flow "Given an existent user query by its id (uuid) and should return a user"
-        [completed-user-creation (helper.http/request :get "/users/:id" user-uuid)
-         created-id (return (:id (:body completed-user-creation)))]
-        (match? {:status 201, :body {:id created-id
-                                     :name "John"
-                                     :surname "Doe"
-                                     :age 30}} completed-user-creation)
+        [{:keys [body] {:keys [id]} :body :as created-user} (helper.http/request :post "/users" user-json)]
+        (match? expected-response created-user)
 
         (flow "Given a succesful user creation should query this user on DB to confirm persistance" ;flow dentro do mesmo flow! 
-              (match?  {:id id
-                        :name "John"
-                        :surname "Doe"
-                        :age 30}
-                       (helper.db/datomic-query (:id  (:id completed-user-creation)))))))
+                (match?  {:user/id id
+                          :user/name "John"
+                          :user/surname "Doe"
+                          :user/age 30}
+                         (helper.db/datomic-query id)))
+        #_(flow "Given an existent user query by its id (uuid) and should return a user"
+              [completed-user-creation (helper.http/request :get "/users/:id" user-uuid)]
+              (match? {:status 201, :body {:id created-id
+                                           :name "John"
+                                           :surname "Doe"
+                                           :age 30}} completed-user-creation)))
 
 
 
