@@ -37,6 +37,7 @@
                                         (s/validate schema param)
                                         context))})))
 
+;TODO refatorar como interceptor de uuid e ai adicionar no mapa
 (defn coerce-path-uuid!
   ([schema]
    (interceptor/interceptor {:name  :coerce-interceptor
@@ -115,6 +116,3 @@
 (defn new-server []
   (map->Server {}))
 
-;-> ==  .  == new - criando uma nova instancia do Record
-;se queremos criar com a notação de mapa direto, so criar o map->TypeName
-; ver documentação aqui: https://clojuredocs.org/clojure.core/defrecord 

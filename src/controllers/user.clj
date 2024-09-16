@@ -24,6 +24,11 @@
   (let [user-by-id (db.user/user-by-id! id db)]
     user-by-id))
 
+(s/defn delete-user! 
+  [user-id :- s/Uuid 
+   db :- p.database/IDatabase]
+  nil)
+
 (s/defn respond-hello
   [name :- (s/maybe s/Str)]
   (if name
@@ -59,12 +64,6 @@
          {:status 200 :body (@(get-in request [:components :database]) user-uuid)}
          (catch ExceptionInfo e
            {:status 400 :body (.getMessage e)}))))
-
-(defn delete-user! [request]
-  (let [user-id (get-in request [:path-params :id])
-        user-uuid (java.util.UUID/fromString user-id)]
-    (swap! @(get-in request [:components :database]) dissoc user-uuid)
-    {:status 204 :body (str "User id # " user-uuid ": deleted!")}))
 
 
 ;======================== ACCOUNT =====================
