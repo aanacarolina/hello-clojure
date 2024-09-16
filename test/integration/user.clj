@@ -32,9 +32,11 @@
                          (helper.db/datomic-query id)))
         (flow "Given an existent user query by its id (uuid) and should return a user"
               [completed-user-creation (helper.http/request :get (str "/users/" id))]
-              (match? {:status 200, :body body} completed-user-creation))))
-
-
+              (match? {:status 200, :body body} completed-user-creation))
+        
+        (flow "Given an existent user we will delete it"
+              [{:keys [body status]} (helper.http/request :delete (str "/users/" id))]
+              (match? {:status 204, :body nil} {:status status :body body}))))
 
 ;TODO test create endpoints
 
