@@ -20,7 +20,7 @@
                   :route-name :users]
                  
                  ["/users" 
-                  :post (conj common-interceptors 
+                  :post (conj common-interceptors
                               (c.server/coerce! w.in.user/UserRequest)
                               d.http-in.user/create-user!
                               (c.server/externalize! w.out.user/UserResponse)) 
@@ -33,6 +33,12 @@
                         (c.server/externalize! w.out.user/UserResponse))
                   :route-name :user-by-id]
                  
+                  ["/users/:id"
+                  :delete 
+                   (conj [(c.server/coerce-path-uuid! w.in.user/UserById)]
+                         d.http-in.user/delete-user!) 
+                  :route-name :delete-user]
+                 
                  ["/users/q" 
                   :get user/query-user 
                   :route-name :query-user-by-id]
@@ -42,9 +48,7 @@
                              user/update-user!) 
                   :route-name :update-user]
                  
-                 ["/users/:id" 
-                  :delete user/delete-user! 
-                  :route-name :delete-user]
+                
                  
                  ;accounts starts here
                         ;["/accounts/:user-id" :post (conj common-interceptors hello/create-account!) :route-name :create-account]
