@@ -34,7 +34,7 @@
   (let [conn (:datomic db)
         snapshot (d/db conn)
         eid (d/entid snapshot id)
-        transact-result @(d/transact conn [[:db.fn/retractEntity eid]])] 
+        transact-result @(d/transact conn [[:db/retractEntity eid]])] 
     transact-result))
 
 #_(s/defmethod delete-user-by-id! :atom-db [id db]
