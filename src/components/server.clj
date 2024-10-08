@@ -37,7 +37,7 @@
                                         (s/validate schema param)
                                         context))})))
 
-;TODO refatorar como interceptor de uuid e ai adicionar no mapa
+;TODO refatorar como interceptor de uuid e ai adicionar (assoc para nao ter q fazer no http-in) no mapa
 (defn coerce-path-uuid!
   ([schema]
    (interceptor/interceptor {:name  :coerce-interceptor

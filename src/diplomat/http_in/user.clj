@@ -32,8 +32,7 @@
 
 (defn delete-user!
   [{:keys [path-params components]}]
-  (let [user-uuid (parse-uuid (:id path-params))
-        response (-> user-uuid
-                     (controllers.user/delete-user! (get-in components [:database])))]
-    {:status 204 :body response}))
+  (let [user-uuid (parse-uuid (:id path-params))]
+    (controllers.user/delete-user! user-uuid (get-in components [:database]))
+    {:status 204 :body nil}))
 

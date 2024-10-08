@@ -4,9 +4,8 @@
    [state-flow.state :as state]
    [integration.aux.init :refer [defflow]]
    [integration.aux.http :as helper.http]
-   [integration.aux.db :as helper.db] 
-     [clojure.edn :as edn]
-   ))
+   [integration.aux.db :as helper.db]
+   [clojure.edn :as edn]))
 
 
 (def user-json "{ \"name\": \"John\", \"surname\": \"Doe\", \"age\": 30}")
@@ -36,10 +35,21 @@
         
         (flow "Given an existent user we will delete it"
               [{:keys [body status]} (helper.http/request :delete (str "/users/" id))]
-              (match? {:status 204, :body nil} {:status status :body body}))))
+              (match? {:status 204, :body nil} {:status status :body body}))
+        
+        #_(flow "Get all users"
+              [{:keys [body status]} (helper.http/request :get "/all-users")]
+              (match? {:status 204, :body nil} {:status status :body body}))
+        
+        #_(flow "Query user by id" 
+           [{:keys [body status]} (helper.http/request :get (str "/users/q" id))]
+           (match? {:status 204, :body nil} {:status status :body body}))
+        
+        #_(flow "Update user by id"
+                [{:keys [body status]} (helper.http/request :put (str "/users/" id))]
+                (match? {:status 204, :body nil} {:status status :body body}))
+        
+        ))
 
 ;TODO test create endpoints
-
-
-
 

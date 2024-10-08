@@ -24,10 +24,11 @@
   (let [user-by-id (db.user/user-by-id! id db)]
     user-by-id))
 
+;if user nao existe, nao estou tratando
 (s/defn delete-user! 
-  [user-id :- s/Uuid 
+  [user-id :- s/Uuid
    db :- p.database/IDatabase]
-  nil)
+  (db.user/delete-user-by-id! user-id db))
 
 (s/defn respond-hello
   [name :- (s/maybe s/Str)]

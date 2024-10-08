@@ -15,7 +15,6 @@
   [id db]
   (d/pull db '[:user/name :user/surname :user/age :user/id] [:user/id id]))
 
-
 ; ============= defmultis =================
 
 ;return the function! não está executando - definicao do defmult
@@ -24,6 +23,26 @@
 
 (defmulti user-by-id!
   select-db)
+
+(defmulti delete-user-by-id!
+  select-db)
+
+
+; ============= delete-user-by-id! =================
+;might need to use retractEntity 
+(s/defmethod delete-user-by-id! :datomic [id db]
+  (let [conn (:datomic db)
+        snapshot (d/db conn)
+        eid (d/entid snapshot id)
+        transact-result @(d/transact conn [[:db.fn/retractEntity eid]])] 
+    transact-result))
+
+#_(s/defmethod delete-user-by-id! :atom-db [id db]
+  (get @(:atom-db db) id))
+
+(s/defmethod delete-user-by-id! :default [_ params]
+  (throw (IllegalArgumentException.
+          (str (get params :type) "Database not supported!\n Please use :datomic or :atom-db"))))
 
 
 ; ============= create-user! =================
@@ -64,6 +83,8 @@
 (s/defmethod user-by-id! :default [_ params]
   (throw (IllegalArgumentException.
           (str (get params :type) "Database not supported!\n Please use :datomic or :atom-db"))))
+
+
 
 ; ============= update-user! =================
 ;update
