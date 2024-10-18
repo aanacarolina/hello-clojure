@@ -147,6 +147,67 @@ criar flow de requisicoes com state e fazendo a requisicao
 
 exception info
 
+Docker - gerenciador de containers
+
+Uma aplicacao é um processo, por mais que seja multithreadc
 
 
+Containers isolam o que é estritamento necessario para rodar o programa especifico. (jar, sdk)
+
+Assim pensaram nas receitas para rodar o programa, que descreve todas as etapas dessas camadas no dockerfile.
+
+Docker image é diferente de uma imagem virtual
+
+Docker sabe lidar com containers (processo)
+
+|OS                 |
+|DOCKER             |
+|MY-APPS-CONTAINERS |
+
+o que precisamos para rodar um servico?
+#OS - linguages compiladas devem ser conforme o OS, (C depende da do OS e arquitetura )
+#Runtime - engine para executar a linguagem que estamos que desenvolvendo
+#SDK (software development kit) - todas dependem 
+
+
+-- Para um projeto clojure
+Lein - gerenciador de dependencias
+Repositorios descentralizados aumentaram complexidade (git/github)
+Lein deps - baixa um milhao de coisas, pq tbm gerencia as dependencias das dependencias (arvore de dependencias) 
+Lein tbm resolve conflitos tipo, preciso versao x mas ja esta na Y,
+Clojar (clj deps) e Maven (java deps) -  
+
+
+cpu - mais coisas mais rapido
+disco - armazenamento duravel
+memoria - coisas de uma vez
+
+load balancer: controlar o trafego de rede, distribuindo a carga para os diferens servidores (horizontal scale - dentro de um servidor pode ter varias servidores).
+
+https://docs.docker.com/build/building/multi-stage/
+
+Cada FROM é um stage diferente 
+containers volumes e network
+
+
+Dockerhub somente imagens publicas - 
+ECR - usamos para nossas imagens privadas.
+
+DockerCompose (polvo) - 
+DockerMachine (baleia dentro do robo) - 
+
+Kernel - 
+
+(Docker Ecosystem)[https://nickjanetakis.com/blog/get-to-know-dockers-ecosystem]
+
+Se em minha aplicacao quero experimentar com outras tecnologias facilitar a interacao ao inves de fazer sempre uma nova instalacao.
+
+
+Kubernetes (Orquestrador de containers)
+
+AWS
+Ja tinha ECS, mas criou EKS com a dominancia do kubernetes.
+
+links - depende e linka na mesma netwrok
+depend - linka apenas
 
