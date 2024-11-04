@@ -105,6 +105,8 @@ Resumo das Diferenças
 Car. (Java Interop Syntax): Sintaxe semelhante a construtores Java, também requer valores na ordem exata.
 map->Car: Construtor baseado em map, permite a criação do record a partir de dados organizados em um map, sem se preocupar com a ordem.
 
+- Protocol
+Diferentemente dos Multimethods, os protocols podem agrupar multiplas funcoes que para resolver o Expression Problems (extensão de data types e novas operações conforme um programa evolui).
 
 - Tests
 seed - dados pra popular db 
