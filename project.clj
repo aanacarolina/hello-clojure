@@ -14,7 +14,8 @@
                  [com.stuartsierra/component "1.1.0"]
                  [prismatic/schema "1.4.1"]
                  [org.clojure/data.json "2.5.0"]
-                 [com.datomic/peer "1.0.7075"]]
+                 [com.datomic/peer "1.0.7075"]
+                 [com.taoensso/faraday "1.12.3"]]
   :min-lein-version "2.0.0"
   :resource-paths ["config", "resources"]
   :profiles {:dev  
