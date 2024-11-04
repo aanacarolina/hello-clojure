@@ -23,3 +23,8 @@
          (return (db.user/query-datomic-by-id id (d/db datomic))))))
 
 
+(defn datomic-query-all
+  ([]
+   (flow "Query Datomic"
+         [datomic (get-state fetch-datomic)]
+         (return (db.user/datomic-get-all-users (d/db datomic))))))

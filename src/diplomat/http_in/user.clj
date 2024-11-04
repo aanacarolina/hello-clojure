@@ -2,7 +2,10 @@
   (:require [wire.in.user :as w.in.user]
             [schema.core :as s]
             [controllers.user]
-            [adapters.user])
+            [adapters.user]
+            [com.stuartsierra.component :as component]
+            [controllers.user :as user]
+            [adapters.user :as adpt])
   (:import (clojure.lang ExceptionInfo)))
 
 ;http-in chama uma controller e obtem uma resposta com status code 
@@ -28,6 +31,13 @@
         response (-> user-uuid
                      (controllers.user/user-by-id! (get-in components [:database]))
                      adapters.user/internal->wire-out)]
+    {:status 200 :body response}))
+
+(defn all-users 
+  [{:keys [components]}]
+  (let [response (-> (get-in components [:database])
+                     controllers.user/all-users
+                     #_adapters.user/internal->wire-out)]
     {:status 200 :body response}))
 
 (defn delete-user!

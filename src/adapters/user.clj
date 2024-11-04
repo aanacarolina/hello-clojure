@@ -17,6 +17,13 @@
    :surname surname
    :age age})
 
+(s/defn all-internal->wire-out :- w.out.user-response/AllUsersResponse
+  [{:user/keys [id name surname age]} :- models.user/UserCreated]
+  [{:id id
+   :name name
+   :surname surname
+   :age age}])
+
 (s/defn wire-in-hello->internal :- (s/maybe models.user/user-name)
   [{:keys [name]} :- w.in.user/HelloRequest]
   name)

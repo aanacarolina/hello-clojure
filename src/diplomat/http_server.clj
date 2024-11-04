@@ -10,45 +10,50 @@
 (def common-interceptors [(body-params/body-params)])
 
 (def endpoints #{["/hello"
-                  :get 
+                  :get
                   (conj [(c.server/coerce! w.in.user/HelloRequest :query-params)]
-                     d.http-in.user/respond-hello)
-                  :route-name :hello] 
-                 
-                 ["/users" 
-                  :get user/all-users 
-                  :route-name :users]
-                 
-                 ["/users" 
+                        d.http-in.user/respond-hello)
+                  :route-name :hello]
+
+                 ["/users"
+                  :get
+                  (conj []
+                        d.http-in.user/all-users
+                        #_(c.server/externalize! w.out.user/AllUsersResponse))
+                  :route-name :all-users]
+
+                 ["/users"
                   :post (conj common-interceptors
                               (c.server/coerce! w.in.user/UserRequest)
                               d.http-in.user/create-user!
-                              (c.server/externalize! w.out.user/UserResponse)) 
+                              (c.server/externalize! w.out.user/UserResponse))
                   :route-name :create-user]
-                 
-                 ["/users/:id" 
-                  :get 
+
+                 ["/users/:id"
+                  :put (conj common-interceptors
+                             user/update-user!)
+                  :route-name :update-user]
+
+                 ["/users/:id"
+                  :get
                   (conj [(c.server/coerce-path-uuid! w.in.user/UserById)]
                         d.http-in.user/user-by-id
                         (c.server/externalize! w.out.user/UserResponse))
                   :route-name :user-by-id]
                  
-                  ["/users/:id"
-                  :delete 
-                   (conj [(c.server/coerce-path-uuid! w.in.user/UserById)]
-                         d.http-in.user/delete-user!) 
-                  :route-name :delete-user]
-                 
-                 ["/users/q" 
-                  :get user/query-user 
+                 ["/users/q"
+                  :get
+                  (conj []
+                        user/query-user)
                   :route-name :query-user-by-id]
+
+                 ["/users/:id"
+                  :delete
+                  (conj [(c.server/coerce-path-uuid! w.in.user/UserById)]
+                        d.http-in.user/delete-user!)
+                  :route-name :delete-user]
+
                  
-                 ["/users/:id" 
-                  :put (conj common-interceptors 
-                             user/update-user!) 
-                  :route-name :update-user]
-                 
-                
                  
                  ;accounts starts here
                         ;["/accounts/:user-id" :post (conj common-interceptors hello/create-account!) :route-name :create-account]

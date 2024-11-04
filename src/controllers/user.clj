@@ -25,10 +25,19 @@
     user-by-id))
 
 ;if user nao existe, nao estou tratando
+;nil can't be typed
 (s/defn delete-user! 
   [user-id :- s/Uuid
    db :- p.database/IDatabase]
   (db.user/delete-user-by-id! user-id db))
+
+
+;problemas: 1 param entao db primeiro, problema pro db-type args
+;nao tem body nem p e q params
+(s/defn all-users 
+  [db :- p.database/IDatabase]
+  #_(println "controller function saying hello" db "!!")
+  (db.user/query-all-users db))
 
 (s/defn respond-hello
   [name :- (s/maybe s/Str)]
@@ -38,9 +47,6 @@
 
 ;======================== USERS =====================
 
-(defn all-users [request]
-  {:status 200
-   :body @(get-in request [:components :database])})
 
 ;static methods belong to the class not to the object
 (defn query-user
