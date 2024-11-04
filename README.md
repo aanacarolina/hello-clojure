@@ -153,9 +153,12 @@ GET nao faz parte
 
 ## Task 8:
 - [x] flow de create - de response
-- [ ] flow de db persisted
+- [x] flow de db persisted
 - [x] criar helper do component de DB
 - [ ] Revisar documentacao do helper (adicionar exemplo mais basico com components - 5 steps da revisao)
 
-
+## Task 9:
+- [x] Criar yaml para rodar o dynamoDB local com docker
+- [x] Criar uma tabela com dynamo (criar component)
+- [x] Basic DDB operations (seguir [tutorial](https://numergent.com/2016-01/Clojure-and-DynamoDB-with-Faraday-part-1.html))
 
