@@ -2,6 +2,7 @@
   (:require [com.stuartsierra.component :as component]
             [components.db :as db]
             [components.datomic :as datomic]
+            [components.dynamo :as ddb]
             [components.routes :as routes]
             [components.server :as server]
             [components.config :as config]
@@ -16,6 +17,7 @@
    :config (config/new-config (:env initial-state "local"))
    :routes (routes/new-routes)
    :database (component/using (datomic/new-datomic-db) [:config])
+  ;:database (component/using (ddb/new-dynamodb))
    :server (component/using (server/new-server) [:database :routes])))
 
 (defn ready-steady-go!

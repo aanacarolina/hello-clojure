@@ -182,7 +182,7 @@ Clojar (clj deps) e Maven (java deps) -
 
 cpu - mais coisas mais rapido
 disco - armazenamento duravel
-memoria - coisas de uma vez
+memoria - mais coisas de uma vez
 
 load balancer: controlar o trafego de rede, distribuindo a carga para os diferens servidores (horizontal scale - dentro de um servidor pode ter varias servidores).
 
@@ -198,7 +198,7 @@ ECR - usamos para nossas imagens privadas.
 DockerCompose (polvo) - 
 DockerMachine (baleia dentro do robo) - 
 
-Kernel - 
+Kernel - significados diferentes em contextos diferentes?
 
 (Docker Ecosystem)[https://nickjanetakis.com/blog/get-to-know-dockers-ecosystem]
 
@@ -213,3 +213,13 @@ Ja tinha ECS, mas criou EKS com a dominancia do kubernetes.
 links - depende e linka na mesma netwrok
 depend - linka apenas
 
+DynamoDB
+
+primary key = partition + sort key
+Por isso a importance de ter que saber os padroes de acesso na criação!!!! Muda tudo!
+No ddb cada partition é um serivdor, por isso a rapidez nas consultas
+Queries so podem ser feitas usando a primary key, senão vira um scan (consome mais recursos, pois lê tudo) 
+
+[DDB Local docker image](https://hub.docker.com/r/amazon/dynamodb-local)
+[AWS Docs - Downloading and Running DynamoDB Local](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)
+[Faraday - Amazon DynamoDB client for Clojure](https://github.com/taoensso/faraday)
