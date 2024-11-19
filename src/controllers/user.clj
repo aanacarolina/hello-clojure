@@ -16,6 +16,7 @@
    db :- p.database/IDatabase]
   (let [new-user (logic.user/new-user (random-uuid) user)
         user-created (db.user/create-user! new-user db)]
+       (println "RESULT> " user-created " <RESULT")
     user-created))
 
 (s/defn user-by-id! :- models.user/UserCreated
